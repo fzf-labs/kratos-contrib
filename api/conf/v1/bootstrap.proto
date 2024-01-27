@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package conf;
+
+import "conf/v1/business.proto";
+import "conf/v1/data.proto";
+import "conf/v1/logger.proto";
+import "conf/v1/registry.proto";
+import "conf/v1/remoteconfig.proto";
+import "conf/v1/server.proto";
+import "conf/v1/tracer.proto";
+
+option go_package = "fkratos-contrib/api/conf/v1;v1";
+
+// 引导信息
+message Bootstrap {
+  string name = 1;
+  Server server = 2;
+  Data data = 3;
+  Tracer trace = 4;
+  Logger logger = 5;
+  Registry registry = 6;
+  RemoteConfig config = 7;
+  Business business = 8;
+}

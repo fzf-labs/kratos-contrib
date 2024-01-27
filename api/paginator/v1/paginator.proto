@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package paginator;
+
+import "buf/validate/validate.proto";
+
+option go_package = "fkratos-contrib/api/paginator/v1;v1";
+
+// 搜索参数
+message SearchParam {
+  string field = 1 [(buf.validate.field).string = {min_len: 1}]; //字段
+  string value = 2; //值
+  string exp = 3 [(buf.validate.field).string = {
+    in: [
+      "=",
+      "!=",
+      ">",
+      ">=",
+      "<",
+      "<=",
+      "IN",
+      "NOT IN",
+      "LIKE",
+      "NOT LIKE"
+    ]
+  }]; //操作
+  string logic = 4 [(buf.validate.field).string = {
+    in: [
+      "AND",
+      "OR"
+    ]
+  }]; //逻辑关系
+}
+
+// 排序参数
+message OrderParam {
+  string field = 1 [(buf.validate.field).string = {min_len: 1}]; //字段
+  string exp = 2 [(buf.validate.field).string = {
+    in: [
+      "ASC",
+      "DESC"
+    ]
+  }]; //表达式 ASC,DESC
+}
+
+// 分页请求
+message PaginatorReq {
+  int32 page = 1 [(buf.validate.field).int32 = {gte: 1}]; // 页码
+  int32 pageSize = 2 [(buf.validate.field).int32 = {
+    gte: 1,
+    lte: 1000
+  }]; // 页数
+  repeated SearchParam search = 3; // 详细搜索
+  repeated OrderParam order = 4; // 排序
+}
+
+// 分页响应
+message PaginatorReply {
+  int32 page = 1; //第几页
+  int32 pageSize = 2; //页大小
+  int32 total = 3; //总数
+}
