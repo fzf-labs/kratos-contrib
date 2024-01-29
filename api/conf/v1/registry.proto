@@ -34,21 +34,13 @@ message Registry {
     bool notLoadCacheAtStart = 10; // 在启动时不读取本地缓存数据，true: 不读取，false: 读取
     bool updateCacheWhenEmpty = 11; // 当服务列表为空时是否更新本地缓存，true: 更新,false: 不更新
   }
-  // Polaris
-  message Polaris {
-    string address = 1; // 服务端地址
-    int32 port = 2; // 服务端端口
-    string namespace = 3; //命名空间
-    string token = 4;
-  }
-
   // Kubernetes
-  message Kubernetes {}
+  message Kubernetes {
 
+  }
   string type = 1;
   Consul consul = 2; // Consul
   Etcd etcd = 3; // Etcd
   Nacos nacos = 4; // Nacos
-  Polaris polaris = 5; // Polaris
   Kubernetes kubernetes = 6; // Kubernetes
 }

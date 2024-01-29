@@ -187,9 +187,9 @@ func (m *Business_Jwt) validate(all bool) error {
 
 	// no validation rules for AccessSecret
 
-	// no validation rules for AccessExpire
-
 	// no validation rules for RefreshAfter
+
+	// no validation rules for AccessExpire
 
 	// no validation rules for Issuer
 

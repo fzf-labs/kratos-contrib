@@ -6,7 +6,7 @@ import "google/protobuf/duration.proto";
 
 option go_package = "fkratos-contrib/api/conf/v1;v1";
 
-// 配置服务
+// 远程配置
 message RemoteConfig {
   message Nacos {
     string address = 1; // 服务端地址
@@ -37,14 +37,10 @@ message RemoteConfig {
   message Kubernetes {
     string namespace = 1;
   }
-
-  message Polaris {}
-
   string type = 1;
   Etcd etcd = 2;
   Consul consul = 3;
   Nacos nacos = 4;
   Apollo apollo = 6;
   Kubernetes kubernetes = 7;
-  Polaris polaris = 8;
 }

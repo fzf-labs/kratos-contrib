@@ -136,7 +136,7 @@ func LoadRemoteConfigSourceConfigs(configPath string) (*conf.RemoteConfig, error
 		return nil, err
 	}
 
-	return rc.Config, nil
+	return rc.RemoteConfig, nil
 }
 
 type ConfigType string

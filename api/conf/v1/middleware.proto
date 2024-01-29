@@ -7,30 +7,27 @@ import "google/protobuf/duration.proto";
 option go_package = "fkratos-contrib/api/conf/v1;v1";
 
 message Middleware {
-  // JWT校验
-  message Jwt {
-    string accessSecret = 1; // JWT 秘钥
-    string refreshAfter = 2; // 刷新时间
-    string accessExpire = 3; // 访问过期时间
-    string issuer = 4; // 签发者
-  }
-  // 限流器
-  message RateLimiter {
-    string name = 1; // 限流器名字，支持：bbr。
-  }
-  // 性能指标
-  message Metrics {
-    bool histogram = 1; // 直方图
-    bool counter = 2; // 计数器
-    bool gauge = 3; // 仪表盘
-    bool summary = 4; // 摘要
-  }
-  bool enable_logging = 1; // 日志开关
-  bool enable_recovery = 2; // 异常恢复
-  bool enable_tracing = 3; // 链路追踪开关
-  bool enable_validate = 4; // 参数校验开关
-  bool enable_circuit_breaker = 5; // 熔断器
-  Jwt jwt = 6;
-  RateLimiter limiter = 7;
-  Metrics metrics = 8;
+  bool enableLogging = 1; // 日志开关
+  bool enableRecovery = 2; // 异常恢复
+  bool enableTracing = 3; // 链路追踪开关
+  bool enableMetadata = 4; // 链路追踪开关
+  bool enableValidate = 5; // 参数校验开关
+  bool enableCircuitBreaker = 6; // 熔断器
+  bool enableRateLimiter = 7; // 限流器
+  bool enableMetrics = 8; // 性能指标
+  RateLimiter limiter = 9; // 限流器配置
+  Metrics metrics = 10; // 性能指标配置
+}
+// 限流器
+message RateLimiter {
+  google.protobuf.Duration window = 1; // 窗口时间
+  int64 bucket = 2; // 桶大小
+  int64 cpuThreshold = 3; // CPU阈值
+}
+// 性能指标
+message Metrics {
+  bool histogram = 1; // 直方图
+  bool counter = 2; // 计数器
+  bool gauge = 3; // 仪表盘
+  bool summary = 4; // 摘要
 }

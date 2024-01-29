@@ -3,11 +3,13 @@ package bootstrap
 import (
 	"context"
 	conf "fkratos-contrib/api/conf/v1"
+	"fkratos-contrib/middleware/limiter"
+	"fkratos-contrib/middleware/logging"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/circuitbreaker"
-	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
@@ -15,58 +17,88 @@ import (
 	"github.com/go-kratos/kratos/v2/registry"
 	kGrpc "github.com/go-kratos/kratos/v2/transport/grpc"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/durationpb"
-
-	"time"
 )
 
 const defaultTimeout = 5 * time.Second
 
 // NewGrpcClient 创建GRPC客户端
-func NewGrpcClient(ctx context.Context, r registry.Discovery, discovery, serviceName string, timeoutDuration *durationpb.Duration) *grpc.ClientConn {
+func NewGrpcClient(
+	ctx context.Context,
+	cfg *conf.Bootstrap,
+	logger log.Logger,
+	r registry.Discovery,
+	m ...middleware.Middleware,
+) *grpc.ClientConn {
 	timeout := defaultTimeout
-	if timeoutDuration != nil {
-		timeout = timeoutDuration.AsDuration()
+	endpoint := "discovery:///" + cfg.GetName()
+	var ms []middleware.Middleware
+	if cfg.Client != nil && cfg.Client.Grpc != nil {
+		if cfg.Client.Grpc.Timeout != nil {
+			timeout = cfg.Client.Grpc.Timeout.AsDuration()
+		}
+		if cfg.Client.Grpc.Middleware != nil {
+			if cfg.Client.Grpc.Middleware.GetEnableTracing() {
+				ms = append(ms, tracing.Client())
+			}
+			if cfg.Client.Grpc.Middleware.GetEnableRecovery() {
+				ms = append(ms, recovery.Recovery())
+			}
+			if cfg.Client.Grpc.Middleware.GetEnableLogging() {
+				ms = append(ms, logging.Client(logger))
+			}
+			if cfg.Client.Grpc.Middleware.GetEnableMetadata() {
+				ms = append(ms, metadata.Client())
+			}
+			if cfg.Client.Grpc.Middleware.GetEnableCircuitBreaker() {
+				ms = append(ms, circuitbreaker.Client())
+			}
+			if cfg.Client.Grpc.Middleware.GetEnableValidate() {
+				ms = append(ms, validate.Validator())
+			}
+		}
 	}
-	endpoint := "discovery:///"
-	switch discovery {
-	case "nacos":
-		serviceName += ".grpc"
-	case "polaris":
-		serviceName += "grpc"
-	default:
-	}
-	endpoint += serviceName
+	ms = append(ms, m...)
 	conn, err := kGrpc.DialInsecure(
 		ctx,
 		kGrpc.WithEndpoint(endpoint),
 		kGrpc.WithDiscovery(r),
 		kGrpc.WithTimeout(timeout),
-		kGrpc.WithMiddleware(
-			recovery.Recovery(),
-			metadata.Client(),
-			tracing.Client(),
-			circuitbreaker.Client(),
-		),
+		kGrpc.WithMiddleware(ms...),
 	)
 	if err != nil {
-		log.Fatalf("dial grpc client [%s] failed: %s", serviceName, err.Error())
+		log.Fatalf("dial grpc client [%s] failed: %s", cfg.GetName(), err.Error())
 	}
 	return conn
 }
 
 // NewGrpcServer 创建GRPC服务端
-func NewGrpcServer(cfg *conf.Bootstrap, logger log.Logger, m ...middleware.Middleware) *kGrpc.Server {
+func NewGrpcServer(
+	cfg *conf.Bootstrap,
+	logger log.Logger,
+	m ...middleware.Middleware,
+) *kGrpc.Server {
 	var opts []kGrpc.ServerOption
 	var ms []middleware.Middleware
-	ms = append(ms,
-		tracing.Server(),
-		logging.Server(logger),
-		recovery.Recovery(),
-		metadata.Server(),
-		validate.Validator(),
-		Metrics(),
-	)
+	if cfg.Server != nil && cfg.Server.Grpc != nil && cfg.Server.Grpc.Middleware != nil {
+		if cfg.Server.Grpc.Middleware.GetEnableTracing() {
+			ms = append(ms, tracing.Server())
+		}
+		if cfg.Server.Grpc.Middleware.GetEnableRecovery() {
+			ms = append(ms, recovery.Recovery())
+		}
+		if cfg.Server.Grpc.Middleware.GetEnableLogging() {
+			ms = append(ms, logging.Server(logger))
+		}
+		if cfg.Client.Grpc.Middleware.GetEnableMetadata() {
+			ms = append(ms, metadata.Client())
+		}
+		if cfg.Server.Grpc.Middleware.GetEnableRateLimiter() {
+			ms = append(ms, limiter.Limit(cfg.Server.Grpc.Middleware.Limiter))
+		}
+		if cfg.Server.Grpc.Middleware.GetEnableValidate() {
+			ms = append(ms, validate.Validator())
+		}
+	}
 	ms = append(ms, m...)
 	opts = append(opts, kGrpc.Middleware(ms...))
 	if cfg.Server.Grpc.Network != "" {
@@ -78,5 +110,6 @@ func NewGrpcServer(cfg *conf.Bootstrap, logger log.Logger, m ...middleware.Middl
 	if cfg.Server.Grpc.Timeout != nil {
 		opts = append(opts, kGrpc.Timeout(cfg.Server.Grpc.Timeout.AsDuration()))
 	}
-	return kGrpc.NewServer(opts...)
+	srv := kGrpc.NewServer(opts...)
+	return srv
 }

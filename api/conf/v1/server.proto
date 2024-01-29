@@ -3,6 +3,7 @@ syntax = "proto3";
 package conf;
 
 import "google/protobuf/duration.proto";
+import "conf/v1/middleware.proto";
 
 option go_package = "fkratos-contrib/api/conf/v1;v1";
 
@@ -10,12 +11,18 @@ option go_package = "fkratos-contrib/api/conf/v1;v1";
 message Server {
   // HTTP
   message HTTP {
+    message CORS {
+      repeated string headers = 1;  // 允许的请求头
+      repeated string methods = 2;  // 允许的请求方法
+      repeated string origins = 3;  // 允许的请求源
+    }
     string network = 1; // 网络
     string addr = 2; // 服务监听地址
     google.protobuf.Duration timeout = 3; // 超时时间
-    repeated string headers = 4; //
-    repeated string methods = 5; //
-    repeated string origins = 6; //
+    Middleware middleware = 4;  // 中间件
+    CORS cors = 5; // 跨域配置
+    bool enableCors = 6;  // 启用跨域
+    bool enablePprof = 7;  // 启用pprof
   }
 
   // gPRC
@@ -23,17 +30,8 @@ message Server {
     string network = 1; // 网络
     string addr = 2; // 服务监听地址
     google.protobuf.Duration timeout = 3; // 超时时间
+    Middleware middleware = 4;  // 中间件
   }
-
-  // Websocket
-  message Websocket {
-    string network = 1; // 网络样式：http、https
-    string addr = 2; // 服务监听地址
-    string path = 3; // 路径
-    google.protobuf.Duration timeout = 4; // 超时时间
-  }
-
   HTTP http = 1; // HTTP服务
   GRPC grpc = 2; // gRPC服务
-  Websocket websocket = 3; // Websocket服务
 }

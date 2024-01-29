@@ -114,35 +114,6 @@ func (m *Server) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetWebsocket()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ServerValidationError{
-					field:  "Websocket",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ServerValidationError{
-					field:  "Websocket",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetWebsocket()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ServerValidationError{
-				field:  "Websocket",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if len(errors) > 0 {
 		return ServerMultiError(errors)
 	}
@@ -274,6 +245,68 @@ func (m *Server_HTTP) validate(all bool) error {
 			}
 		}
 	}
+
+	if all {
+		switch v := interface{}(m.GetMiddleware()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Server_HTTPValidationError{
+					field:  "Middleware",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Server_HTTPValidationError{
+					field:  "Middleware",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMiddleware()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Server_HTTPValidationError{
+				field:  "Middleware",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCors()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Server_HTTPValidationError{
+					field:  "Cors",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Server_HTTPValidationError{
+					field:  "Cors",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCors()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Server_HTTPValidationError{
+				field:  "Cors",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for EnableCors
+
+	// no validation rules for EnablePprof
 
 	if len(errors) > 0 {
 		return Server_HTTPMultiError(errors)
@@ -407,6 +440,35 @@ func (m *Server_GRPC) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetMiddleware()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Server_GRPCValidationError{
+					field:  "Middleware",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Server_GRPCValidationError{
+					field:  "Middleware",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMiddleware()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Server_GRPCValidationError{
+				field:  "Middleware",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return Server_GRPCMultiError(errors)
 	}
@@ -484,77 +546,42 @@ var _ interface {
 	ErrorName() string
 } = Server_GRPCValidationError{}
 
-// Validate checks the field values on Server_Websocket with the rules defined
+// Validate checks the field values on Server_HTTP_CORS with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *Server_Websocket) Validate() error {
+func (m *Server_HTTP_CORS) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Server_Websocket with the rules
+// ValidateAll checks the field values on Server_HTTP_CORS with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// Server_WebsocketMultiError, or nil if none found.
-func (m *Server_Websocket) ValidateAll() error {
+// Server_HTTP_CORSMultiError, or nil if none found.
+func (m *Server_HTTP_CORS) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Server_Websocket) validate(all bool) error {
+func (m *Server_HTTP_CORS) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for Network
-
-	// no validation rules for Addr
-
-	// no validation rules for Path
-
-	if all {
-		switch v := interface{}(m.GetTimeout()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, Server_WebsocketValidationError{
-					field:  "Timeout",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, Server_WebsocketValidationError{
-					field:  "Timeout",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetTimeout()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Server_WebsocketValidationError{
-				field:  "Timeout",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if len(errors) > 0 {
-		return Server_WebsocketMultiError(errors)
+		return Server_HTTP_CORSMultiError(errors)
 	}
 
 	return nil
 }
 
-// Server_WebsocketMultiError is an error wrapping multiple validation errors
-// returned by Server_Websocket.ValidateAll() if the designated constraints
+// Server_HTTP_CORSMultiError is an error wrapping multiple validation errors
+// returned by Server_HTTP_CORS.ValidateAll() if the designated constraints
 // aren't met.
-type Server_WebsocketMultiError []error
+type Server_HTTP_CORSMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m Server_WebsocketMultiError) Error() string {
+func (m Server_HTTP_CORSMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -563,11 +590,11 @@ func (m Server_WebsocketMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m Server_WebsocketMultiError) AllErrors() []error { return m }
+func (m Server_HTTP_CORSMultiError) AllErrors() []error { return m }
 
-// Server_WebsocketValidationError is the validation error returned by
-// Server_Websocket.Validate if the designated constraints aren't met.
-type Server_WebsocketValidationError struct {
+// Server_HTTP_CORSValidationError is the validation error returned by
+// Server_HTTP_CORS.Validate if the designated constraints aren't met.
+type Server_HTTP_CORSValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -575,22 +602,22 @@ type Server_WebsocketValidationError struct {
 }
 
 // Field function returns field value.
-func (e Server_WebsocketValidationError) Field() string { return e.field }
+func (e Server_HTTP_CORSValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e Server_WebsocketValidationError) Reason() string { return e.reason }
+func (e Server_HTTP_CORSValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e Server_WebsocketValidationError) Cause() error { return e.cause }
+func (e Server_HTTP_CORSValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e Server_WebsocketValidationError) Key() bool { return e.key }
+func (e Server_HTTP_CORSValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e Server_WebsocketValidationError) ErrorName() string { return "Server_WebsocketValidationError" }
+func (e Server_HTTP_CORSValidationError) ErrorName() string { return "Server_HTTP_CORSValidationError" }
 
 // Error satisfies the builtin error interface
-func (e Server_WebsocketValidationError) Error() string {
+func (e Server_HTTP_CORSValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -602,14 +629,14 @@ func (e Server_WebsocketValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sServer_Websocket.%s: %s%s",
+		"invalid %sServer_HTTP_CORS.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = Server_WebsocketValidationError{}
+var _ error = Server_HTTP_CORSValidationError{}
 
 var _ interface {
 	Field() string
@@ -617,4 +644,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = Server_WebsocketValidationError{}
+} = Server_HTTP_CORSValidationError{}

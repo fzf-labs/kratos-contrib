@@ -6,12 +6,12 @@ option go_package = "fkratos-contrib/api/conf/v1;v1";
 
 // 业务
 message Business {
-  // jwt
+  // JWT校验
   message Jwt {
-    string accessSecret = 1; //秘钥
-    int64 accessExpire = 2; //过期时间
-    int64 refreshAfter = 3; //刷新时间 (大于刷新时间,而小于过期时间,则刷新Token)
-    string issuer = 4; //签发人
+    string accessSecret = 1; // JWT 秘钥
+    string refreshAfter = 2; // 刷新时间
+    string accessExpire = 3; // 访问过期时间
+    string issuer = 4; // 签发者
   }
   Jwt jwt = 1;
 }

@@ -63,38 +63,15 @@ func (m *Middleware) validate(all bool) error {
 
 	// no validation rules for EnableTracing
 
+	// no validation rules for EnableMetadata
+
 	// no validation rules for EnableValidate
 
 	// no validation rules for EnableCircuitBreaker
 
-	if all {
-		switch v := interface{}(m.GetJwt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Jwt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, MiddlewareValidationError{
-					field:  "Jwt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetJwt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return MiddlewareValidationError{
-				field:  "Jwt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for EnableRateLimiter
+
+	// no validation rules for EnableMetrics
 
 	if all {
 		switch v := interface{}(m.GetLimiter()).(type) {
@@ -231,50 +208,74 @@ var _ interface {
 	ErrorName() string
 } = MiddlewareValidationError{}
 
-// Validate checks the field values on Middleware_Jwt with the rules defined in
+// Validate checks the field values on RateLimiter with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Middleware_Jwt) Validate() error {
+func (m *RateLimiter) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Middleware_Jwt with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in Middleware_JwtMultiError,
-// or nil if none found.
-func (m *Middleware_Jwt) ValidateAll() error {
+// ValidateAll checks the field values on RateLimiter with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RateLimiterMultiError, or
+// nil if none found.
+func (m *RateLimiter) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Middleware_Jwt) validate(all bool) error {
+func (m *RateLimiter) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	// no validation rules for AccessSecret
+	if all {
+		switch v := interface{}(m.GetWindow()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RateLimiterValidationError{
+					field:  "Window",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RateLimiterValidationError{
+					field:  "Window",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetWindow()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RateLimiterValidationError{
+				field:  "Window",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for RefreshAfter
+	// no validation rules for Bucket
 
-	// no validation rules for AccessExpire
-
-	// no validation rules for Issuer
+	// no validation rules for CpuThreshold
 
 	if len(errors) > 0 {
-		return Middleware_JwtMultiError(errors)
+		return RateLimiterMultiError(errors)
 	}
 
 	return nil
 }
 
-// Middleware_JwtMultiError is an error wrapping multiple validation errors
-// returned by Middleware_Jwt.ValidateAll() if the designated constraints
-// aren't met.
-type Middleware_JwtMultiError []error
+// RateLimiterMultiError is an error wrapping multiple validation errors
+// returned by RateLimiter.ValidateAll() if the designated constraints aren't met.
+type RateLimiterMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m Middleware_JwtMultiError) Error() string {
+func (m RateLimiterMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -283,11 +284,11 @@ func (m Middleware_JwtMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m Middleware_JwtMultiError) AllErrors() []error { return m }
+func (m RateLimiterMultiError) AllErrors() []error { return m }
 
-// Middleware_JwtValidationError is the validation error returned by
-// Middleware_Jwt.Validate if the designated constraints aren't met.
-type Middleware_JwtValidationError struct {
+// RateLimiterValidationError is the validation error returned by
+// RateLimiter.Validate if the designated constraints aren't met.
+type RateLimiterValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -295,22 +296,22 @@ type Middleware_JwtValidationError struct {
 }
 
 // Field function returns field value.
-func (e Middleware_JwtValidationError) Field() string { return e.field }
+func (e RateLimiterValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e Middleware_JwtValidationError) Reason() string { return e.reason }
+func (e RateLimiterValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e Middleware_JwtValidationError) Cause() error { return e.cause }
+func (e RateLimiterValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e Middleware_JwtValidationError) Key() bool { return e.key }
+func (e RateLimiterValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e Middleware_JwtValidationError) ErrorName() string { return "Middleware_JwtValidationError" }
+func (e RateLimiterValidationError) ErrorName() string { return "RateLimiterValidationError" }
 
 // Error satisfies the builtin error interface
-func (e Middleware_JwtValidationError) Error() string {
+func (e RateLimiterValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -322,14 +323,14 @@ func (e Middleware_JwtValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sMiddleware_Jwt.%s: %s%s",
+		"invalid %sRateLimiter.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = Middleware_JwtValidationError{}
+var _ error = RateLimiterValidationError{}
 
 var _ interface {
 	Field() string
@@ -337,128 +338,23 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = Middleware_JwtValidationError{}
+} = RateLimiterValidationError{}
 
-// Validate checks the field values on Middleware_RateLimiter with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *Middleware_RateLimiter) Validate() error {
+// Validate checks the field values on Metrics with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Metrics) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Middleware_RateLimiter with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// Middleware_RateLimiterMultiError, or nil if none found.
-func (m *Middleware_RateLimiter) ValidateAll() error {
+// ValidateAll checks the field values on Metrics with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in MetricsMultiError, or nil if none found.
+func (m *Metrics) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Middleware_RateLimiter) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Name
-
-	if len(errors) > 0 {
-		return Middleware_RateLimiterMultiError(errors)
-	}
-
-	return nil
-}
-
-// Middleware_RateLimiterMultiError is an error wrapping multiple validation
-// errors returned by Middleware_RateLimiter.ValidateAll() if the designated
-// constraints aren't met.
-type Middleware_RateLimiterMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m Middleware_RateLimiterMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m Middleware_RateLimiterMultiError) AllErrors() []error { return m }
-
-// Middleware_RateLimiterValidationError is the validation error returned by
-// Middleware_RateLimiter.Validate if the designated constraints aren't met.
-type Middleware_RateLimiterValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Middleware_RateLimiterValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Middleware_RateLimiterValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Middleware_RateLimiterValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Middleware_RateLimiterValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Middleware_RateLimiterValidationError) ErrorName() string {
-	return "Middleware_RateLimiterValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e Middleware_RateLimiterValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sMiddleware_RateLimiter.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Middleware_RateLimiterValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Middleware_RateLimiterValidationError{}
-
-// Validate checks the field values on Middleware_Metrics with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *Middleware_Metrics) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Middleware_Metrics with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// Middleware_MetricsMultiError, or nil if none found.
-func (m *Middleware_Metrics) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Middleware_Metrics) validate(all bool) error {
+func (m *Metrics) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -474,19 +370,18 @@ func (m *Middleware_Metrics) validate(all bool) error {
 	// no validation rules for Summary
 
 	if len(errors) > 0 {
-		return Middleware_MetricsMultiError(errors)
+		return MetricsMultiError(errors)
 	}
 
 	return nil
 }
 
-// Middleware_MetricsMultiError is an error wrapping multiple validation errors
-// returned by Middleware_Metrics.ValidateAll() if the designated constraints
-// aren't met.
-type Middleware_MetricsMultiError []error
+// MetricsMultiError is an error wrapping multiple validation errors returned
+// by Metrics.ValidateAll() if the designated constraints aren't met.
+type MetricsMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m Middleware_MetricsMultiError) Error() string {
+func (m MetricsMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -495,11 +390,11 @@ func (m Middleware_MetricsMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m Middleware_MetricsMultiError) AllErrors() []error { return m }
+func (m MetricsMultiError) AllErrors() []error { return m }
 
-// Middleware_MetricsValidationError is the validation error returned by
-// Middleware_Metrics.Validate if the designated constraints aren't met.
-type Middleware_MetricsValidationError struct {
+// MetricsValidationError is the validation error returned by Metrics.Validate
+// if the designated constraints aren't met.
+type MetricsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -507,24 +402,22 @@ type Middleware_MetricsValidationError struct {
 }
 
 // Field function returns field value.
-func (e Middleware_MetricsValidationError) Field() string { return e.field }
+func (e MetricsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e Middleware_MetricsValidationError) Reason() string { return e.reason }
+func (e MetricsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e Middleware_MetricsValidationError) Cause() error { return e.cause }
+func (e MetricsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e Middleware_MetricsValidationError) Key() bool { return e.key }
+func (e MetricsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e Middleware_MetricsValidationError) ErrorName() string {
-	return "Middleware_MetricsValidationError"
-}
+func (e MetricsValidationError) ErrorName() string { return "MetricsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e Middleware_MetricsValidationError) Error() string {
+func (e MetricsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -536,14 +429,14 @@ func (e Middleware_MetricsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sMiddleware_Metrics.%s: %s%s",
+		"invalid %sMetrics.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = Middleware_MetricsValidationError{}
+var _ error = MetricsValidationError{}
 
 var _ interface {
 	Field() string
@@ -551,4 +444,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = Middleware_MetricsValidationError{}
+} = MetricsValidationError{}

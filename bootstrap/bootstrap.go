@@ -10,10 +10,10 @@ import (
 // Bootstrap 应用引导启动
 func Bootstrap(service *Service) (*conf.Bootstrap, log.Logger, registry.Registrar, registry.Discovery) {
 	// init command
-	Flags := NewCommand()
+	flags := NewCommand()
 
 	// load configs
-	cfg := LoadBootstrapConfig(Flags.Conf)
+	cfg := LoadBootstrapConfig(flags.Conf)
 	if cfg == nil {
 		panic("load config failed")
 	}

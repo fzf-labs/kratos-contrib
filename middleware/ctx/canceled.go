@@ -13,7 +13,7 @@ var RequestCanceledErr = errors.New(http.StatusConflict, "RequestCanceledErr", "
 func Canceled() middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
-			panicChan := make(chan any, 1)
+			panicChan := make(chan interface{}, 1)
 			done := make(chan struct{})
 			go func() {
 				defer func() {
