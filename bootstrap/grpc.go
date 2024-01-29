@@ -27,11 +27,12 @@ func NewGrpcClient(
 	ctx context.Context,
 	cfg *conf.Bootstrap,
 	logger log.Logger,
+	serverName string,
 	r registry.Discovery,
 	m ...middleware.Middleware,
 ) *grpc.ClientConn {
 	timeout := defaultTimeout
-	endpoint := "discovery:///" + cfg.GetName()
+	endpoint := "discovery:///" + serverName
 	var ms []middleware.Middleware
 	if cfg.Client != nil && cfg.Client.Grpc != nil {
 		if cfg.Client.Grpc.Timeout != nil {
@@ -67,7 +68,7 @@ func NewGrpcClient(
 		kGrpc.WithMiddleware(ms...),
 	)
 	if err != nil {
-		log.Fatalf("dial grpc client [%s] failed: %s", cfg.GetName(), err.Error())
+		log.Fatalf("dial grpc client [%s] failed: %s", serverName, err.Error())
 	}
 	return conn
 }
