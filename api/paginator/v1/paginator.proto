@@ -4,7 +4,7 @@ package paginator;
 
 import "buf/validate/validate.proto";
 
-option go_package = "fkratos-contrib/api/paginator/v1;v1";
+option go_package = "github.com/fzf-labs/fkratos-contrib/api/paginator/v1;v1";
 
 // 搜索参数
 message SearchParam {

@@ -2,10 +2,11 @@ package bootstrap
 
 import (
 	"context"
-	conf "fkratos-contrib/api/conf/v1"
-	"fkratos-contrib/middleware/limiter"
-	"fkratos-contrib/middleware/logging"
 	"time"
+
+	conf "github.com/fzf-labs/fkratos-contrib/api/conf/v1"
+	"github.com/fzf-labs/fkratos-contrib/middleware/limiter"
+	"github.com/fzf-labs/fkratos-contrib/middleware/logging"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"

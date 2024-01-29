@@ -4,7 +4,7 @@ package conf;
 
 import "google/protobuf/duration.proto";
 
-option go_package = "fkratos-contrib/api/conf/v1;v1";
+option go_package = "github.com/fzf-labs/fkratos-contrib/api/conf/v1;v1";
 
 message Middleware {
   bool enableLogging = 1; // 日志开关

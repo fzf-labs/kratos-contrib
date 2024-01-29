@@ -4,7 +4,7 @@ package conf;
 
 import "google/protobuf/duration.proto";
 import "conf/v1/middleware.proto";
-option go_package = "fkratos-contrib/api/conf/v1;v1";
+option go_package = "github.com/fzf-labs/fkratos-contrib/api/conf/v1;v1";
 
 // 客户端
 message Client {

@@ -1,8 +1,9 @@
 package db
 
 import (
-	conf "fkratos-contrib/api/conf/v1"
 	"fmt"
+
+	conf "github.com/fzf-labs/fkratos-contrib/api/conf/v1"
 
 	"github.com/fzf-labs/fpkg/orm"
 	"github.com/go-kratos/kratos/v2/log"

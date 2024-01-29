@@ -1,8 +1,9 @@
 package bootstrap
 
 import (
-	conf "fkratos-contrib/api/conf/v1"
 	"path/filepath"
+
+	conf "github.com/fzf-labs/fkratos-contrib/api/conf/v1"
 
 	etcdKratos "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/v2/log"

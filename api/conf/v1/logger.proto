@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package conf;
 
-option go_package = "fkratos-contrib/api/conf/v1;v1";
+option go_package = "github.com/fzf-labs/fkratos-contrib/api/conf/v1;v1";
 
 // 日志
 message Logger {

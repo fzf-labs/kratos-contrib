@@ -1,4 +1,4 @@
-module fkratos-contrib
+module github.com/fzf-labs/fkratos-contrib
 
 go 1.21
 

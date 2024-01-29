@@ -11,7 +11,7 @@ import "conf/v1/remoteconfig.proto";
 import "conf/v1/server.proto";
 import "conf/v1/tracer.proto";
 
-option go_package = "fkratos-contrib/api/conf/v1;v1";
+option go_package = "github.com/fzf-labs/fkratos-contrib/api/conf/v1;v1";
 
 // 引导信息
 message Bootstrap {
