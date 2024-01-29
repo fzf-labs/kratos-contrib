@@ -1,4 +1,4 @@
-package cache
+package bootstrap
 
 import (
 	"fmt"
