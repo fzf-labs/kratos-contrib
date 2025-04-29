@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package conf;
+
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/fzf-labs/kratos-contrib/api/conf/v1;v1";
+
+// 数据
+message Data {
+  // 数据库 gorm
+  message Gorm {
+    string dataSourceName = 1; // DSN
+    int32 maxIdleConn = 2; // 闲置连接数
+    int32 maxOpenConn = 3; // 最大打开的连接数
+    google.protobuf.Duration connMaxLifeTime = 4; // 连接可以重复使用的最长时间
+    bool showLog = 5; // 慢日志开关
+    bool tracing = 6; // 链路追踪开关
+  }
+  // redis
+  message Redis {
+    string network = 1; // 网络
+    string addr = 2; // 服务端地址
+    string username = 3; // 账号
+    string password = 4; // 密码
+    int32 db = 5; // 数据库索引
+    google.protobuf.Duration dialTimeout = 6; // 连接超时时间
+    google.protobuf.Duration readTimeout = 7; // 读取超时时间
+    google.protobuf.Duration writeTimeout = 8; // 写入超时时间
+    bool tracing = 9; // 链路追踪开关
+    bool metrics = 10; // 指标开关
+  }
+
+  Gorm gorm = 1; // 数据库 gorm
+  Redis redis = 2; // Redis
+}

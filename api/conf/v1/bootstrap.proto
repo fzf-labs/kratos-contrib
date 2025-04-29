@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package conf;
+
+import "api/conf/v1/business.proto";
+import "api/conf/v1/client.proto";
+import "api/conf/v1/data.proto";
+import "api/conf/v1/logger.proto";
+import "api/conf/v1/registry.proto";
+import "api/conf/v1/remoteconfig.proto";
+import "api/conf/v1/server.proto";
+import "api/conf/v1/tracer.proto";
+
+option go_package = "github.com/fzf-labs/kratos-contrib/api/conf/v1;v1";
+
+// 引导信息
+message Bootstrap {
+  string name = 1; // 服务名
+  Server server = 2; // 服务配置  
+  Client client = 3; // 客户端配置
+  Data data = 4; // 数据配置
+  Tracer trace = 5; // 链路追踪配置
+  Logger logger = 6; // 日志配置
+  Registry registry = 7; // 注册中心配置
+  RemoteConfig remoteConfig = 8; // 远程配置
+  Business business = 9; // 业务配置
+}
