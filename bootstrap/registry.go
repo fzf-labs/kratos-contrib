@@ -1,8 +1,7 @@
 package bootstrap
 
 import (
-	etcdClient "go.etcd.io/etcd/client/v3"
-
+	conf "github.com/fzf-labs/kratos-contrib/api/conf/v1"
 	consulKratos "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	etcdKratos "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	nacosKratos "github.com/go-kratos/kratos/contrib/registry/nacos/v2"
@@ -12,8 +11,7 @@ import (
 	nacosClients "github.com/nacos-group/nacos-sdk-go/clients"
 	nacosConstant "github.com/nacos-group/nacos-sdk-go/common/constant"
 	nacosVo "github.com/nacos-group/nacos-sdk-go/vo"
-
-	conf "github.com/fzf-labs/kratos-contrib/api/conf/v1"
+	etcdClient "go.etcd.io/etcd/client/v3"
 )
 
 type RegistryType string

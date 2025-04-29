@@ -24,15 +24,14 @@ const (
 // 引导信息
 type Bootstrap struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`                 // 服务名
-	Server        *Server                `protobuf:"bytes,2,opt,name=server,proto3" json:"server,omitempty"`             // 服务配置
-	Client        *Client                `protobuf:"bytes,3,opt,name=client,proto3" json:"client,omitempty"`             // 客户端配置
-	Data          *Data                  `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`                 // 数据配置
-	Trace         *Tracer                `protobuf:"bytes,5,opt,name=trace,proto3" json:"trace,omitempty"`               // 链路追踪配置
-	Logger        *Logger                `protobuf:"bytes,6,opt,name=logger,proto3" json:"logger,omitempty"`             // 日志配置
-	Registry      *Registry              `protobuf:"bytes,7,opt,name=registry,proto3" json:"registry,omitempty"`         // 注册中心配置
-	RemoteConfig  *RemoteConfig          `protobuf:"bytes,8,opt,name=remoteConfig,proto3" json:"remoteConfig,omitempty"` // 远程配置
-	Business      *Business              `protobuf:"bytes,9,opt,name=business,proto3" json:"business,omitempty"`         // 业务配置
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`         // 服务名
+	Server        *Server                `protobuf:"bytes,2,opt,name=server,proto3" json:"server,omitempty"`     // 服务配置
+	Client        *Client                `protobuf:"bytes,3,opt,name=client,proto3" json:"client,omitempty"`     // 客户端配置
+	Data          *Data                  `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`         // 数据配置
+	Trace         *Tracer                `protobuf:"bytes,5,opt,name=trace,proto3" json:"trace,omitempty"`       // 链路追踪配置
+	Logger        *Logger                `protobuf:"bytes,6,opt,name=logger,proto3" json:"logger,omitempty"`     // 日志配置
+	Registry      *Registry              `protobuf:"bytes,7,opt,name=registry,proto3" json:"registry,omitempty"` // 注册中心配置
+	Business      *Business              `protobuf:"bytes,8,opt,name=business,proto3" json:"business,omitempty"` // 业务配置
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -116,13 +115,6 @@ func (x *Bootstrap) GetRegistry() *Registry {
 	return nil
 }
 
-func (x *Bootstrap) GetRemoteConfig() *RemoteConfig {
-	if x != nil {
-		return x.RemoteConfig
-	}
-	return nil
-}
-
 func (x *Bootstrap) GetBusiness() *Business {
 	if x != nil {
 		return x.Business
@@ -134,7 +126,7 @@ var File_api_conf_v1_bootstrap_proto protoreflect.FileDescriptor
 
 const file_api_conf_v1_bootstrap_proto_rawDesc = "" +
 	"\n" +
-	"\x1bapi/conf/v1/bootstrap.proto\x12\x04conf\x1a\x1aapi/conf/v1/business.proto\x1a\x18api/conf/v1/client.proto\x1a\x16api/conf/v1/data.proto\x1a\x18api/conf/v1/logger.proto\x1a\x1aapi/conf/v1/registry.proto\x1a\x1eapi/conf/v1/remoteconfig.proto\x1a\x18api/conf/v1/server.proto\x1a\x18api/conf/v1/tracer.proto\"\xe5\x02\n" +
+	"\x1bapi/conf/v1/bootstrap.proto\x12\x04conf\x1a\x1aapi/conf/v1/business.proto\x1a\x18api/conf/v1/client.proto\x1a\x16api/conf/v1/data.proto\x1a\x18api/conf/v1/logger.proto\x1a\x1aapi/conf/v1/registry.proto\x1a\x18api/conf/v1/server.proto\x1a\x18api/conf/v1/tracer.proto\"\xad\x02\n" +
 	"\tBootstrap\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12$\n" +
 	"\x06server\x18\x02 \x01(\v2\f.conf.ServerR\x06server\x12$\n" +
@@ -143,9 +135,8 @@ const file_api_conf_v1_bootstrap_proto_rawDesc = "" +
 	".conf.DataR\x04data\x12\"\n" +
 	"\x05trace\x18\x05 \x01(\v2\f.conf.TracerR\x05trace\x12$\n" +
 	"\x06logger\x18\x06 \x01(\v2\f.conf.LoggerR\x06logger\x12*\n" +
-	"\bregistry\x18\a \x01(\v2\x0e.conf.RegistryR\bregistry\x126\n" +
-	"\fremoteConfig\x18\b \x01(\v2\x12.conf.RemoteConfigR\fremoteConfig\x12*\n" +
-	"\bbusiness\x18\t \x01(\v2\x0e.conf.BusinessR\bbusinessB\x86\x01\n" +
+	"\bregistry\x18\a \x01(\v2\x0e.conf.RegistryR\bregistry\x12*\n" +
+	"\bbusiness\x18\b \x01(\v2\x0e.conf.BusinessR\bbusinessB\x86\x01\n" +
 	"\bcom.confB\x0eBootstrapProtoP\x01Z:github.com/fzf-labs/kratos-contrib/api/conf/v1/api/conf/v1\xa2\x02\x03CXX\xaa\x02\x04Conf\xca\x02\x04Conf\xe2\x02\x10Conf\\GPBMetadata\xea\x02\x04Confb\x06proto3"
 
 var (
@@ -162,15 +153,14 @@ func file_api_conf_v1_bootstrap_proto_rawDescGZIP() []byte {
 
 var file_api_conf_v1_bootstrap_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_api_conf_v1_bootstrap_proto_goTypes = []any{
-	(*Bootstrap)(nil),    // 0: conf.Bootstrap
-	(*Server)(nil),       // 1: conf.Server
-	(*Client)(nil),       // 2: conf.Client
-	(*Data)(nil),         // 3: conf.Data
-	(*Tracer)(nil),       // 4: conf.Tracer
-	(*Logger)(nil),       // 5: conf.Logger
-	(*Registry)(nil),     // 6: conf.Registry
-	(*RemoteConfig)(nil), // 7: conf.RemoteConfig
-	(*Business)(nil),     // 8: conf.Business
+	(*Bootstrap)(nil), // 0: conf.Bootstrap
+	(*Server)(nil),    // 1: conf.Server
+	(*Client)(nil),    // 2: conf.Client
+	(*Data)(nil),      // 3: conf.Data
+	(*Tracer)(nil),    // 4: conf.Tracer
+	(*Logger)(nil),    // 5: conf.Logger
+	(*Registry)(nil),  // 6: conf.Registry
+	(*Business)(nil),  // 7: conf.Business
 }
 var file_api_conf_v1_bootstrap_proto_depIdxs = []int32{
 	1, // 0: conf.Bootstrap.server:type_name -> conf.Server
@@ -179,13 +169,12 @@ var file_api_conf_v1_bootstrap_proto_depIdxs = []int32{
 	4, // 3: conf.Bootstrap.trace:type_name -> conf.Tracer
 	5, // 4: conf.Bootstrap.logger:type_name -> conf.Logger
 	6, // 5: conf.Bootstrap.registry:type_name -> conf.Registry
-	7, // 6: conf.Bootstrap.remoteConfig:type_name -> conf.RemoteConfig
-	8, // 7: conf.Bootstrap.business:type_name -> conf.Business
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	7, // 6: conf.Bootstrap.business:type_name -> conf.Business
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_api_conf_v1_bootstrap_proto_init() }
@@ -198,7 +187,6 @@ func file_api_conf_v1_bootstrap_proto_init() {
 	file_api_conf_v1_data_proto_init()
 	file_api_conf_v1_logger_proto_init()
 	file_api_conf_v1_registry_proto_init()
-	file_api_conf_v1_remoteconfig_proto_init()
 	file_api_conf_v1_server_proto_init()
 	file_api_conf_v1_tracer_proto_init()
 	type x struct{}
