@@ -13,5 +13,5 @@ message Business {
     int32 accessExpire = 3; // 访问过期时间
     string issuer = 4; // 签发者
   }
-  Jwt jwt = 1; // JWT 配置  
+  Jwt jwt = 1; // JWT 配置
 }

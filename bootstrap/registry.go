@@ -1,12 +1,10 @@
 package bootstrap
 
 import (
-	"path/filepath"
+	etcdClient "go.etcd.io/etcd/client/v3"
 
-	conf "github.com/fzf-labs/kratos-contrib/api/conf/v1"
 	consulKratos "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	etcdKratos "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
-	k8sRegistry "github.com/go-kratos/kratos/contrib/registry/kubernetes/v2"
 	nacosKratos "github.com/go-kratos/kratos/contrib/registry/nacos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/registry"
@@ -14,20 +12,16 @@ import (
 	nacosClients "github.com/nacos-group/nacos-sdk-go/clients"
 	nacosConstant "github.com/nacos-group/nacos-sdk-go/common/constant"
 	nacosVo "github.com/nacos-group/nacos-sdk-go/vo"
-	etcdClient "go.etcd.io/etcd/client/v3"
-	k8s "k8s.io/client-go/kubernetes"
-	k8sRest "k8s.io/client-go/rest"
-	k8sTools "k8s.io/client-go/tools/clientcmd"
-	k8sUtil "k8s.io/client-go/util/homedir"
+
+	conf "github.com/fzf-labs/kratos-contrib/api/conf/v1"
 )
 
 type RegistryType string
 
 const (
-	Consul     RegistryType = "consul"
-	Etcd       RegistryType = "etcd"
-	Nacos      RegistryType = "nacos"
-	Kubernetes RegistryType = "kubernetes"
+	Consul RegistryType = "consul"
+	Etcd   RegistryType = "etcd"
+	Nacos  RegistryType = "nacos"
 )
 
 // NewRegistryAndDiscovery 创建一个服务发现客户端
@@ -44,9 +38,6 @@ func NewRegistryAndDiscovery(cfg *conf.Registry) (registry.Registrar, registry.D
 		return res, res
 	case Nacos:
 		res := NewNacosRegistry(cfg)
-		return res, res
-	case Kubernetes:
-		res := NewKubernetesRegistry(cfg)
 		return res, res
 	}
 	return nil, nil
@@ -65,9 +56,6 @@ func NewRegistry(cfg *conf.Registry) registry.Registrar {
 		return res
 	case Nacos:
 		res := NewNacosRegistry(cfg)
-		return res
-	case Kubernetes:
-		res := NewKubernetesRegistry(cfg)
 		return res
 	}
 	return nil
@@ -136,30 +124,6 @@ func NewNacosRegistry(c *conf.Registry) *nacosKratos.Registry {
 	}
 
 	reg := nacosKratos.New(cli)
-
-	return reg
-}
-
-// NewKubernetesRegistry 创建一个注册发现客户端 - Kubernetes
-func NewKubernetesRegistry(_ *conf.Registry) *k8sRegistry.Registry {
-	restConfig, err := k8sRest.InClusterConfig()
-	if err != nil {
-		home := k8sUtil.HomeDir()
-		kubeConfig := filepath.Join(home, ".kube", "config")
-		restConfig, err = k8sTools.BuildConfigFromFlags("", kubeConfig)
-		if err != nil {
-			log.Fatal(err)
-			return nil
-		}
-	}
-
-	clientSet, err := k8s.NewForConfig(restConfig)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-
-	reg := k8sRegistry.NewRegistry(clientSet)
 
 	return reg
 }

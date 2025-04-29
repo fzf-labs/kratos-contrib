@@ -1,0 +1,51 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 6s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 6s
+data:
+  gorm:
+    dataSourceName: host=0.0.0.0 port=5432 user=postgres password=123456 dbname=kratos sslmode=disable TimeZone=Asia/Shanghai
+    maxIdleConn: 10
+    maxOpenConn: 60
+    connMaxLifeTime: 60s
+    showLog: true
+    tracing: true
+  redis:
+    addr: 0.0.0.0:6379
+    password: "123456"
+    db: 0
+    dialTimeout: 1s
+    readTimeout: 0.4s
+    writeTimeout: 0.6s
+trace:
+  batcher: "otlphttp"
+  endpoint: "0.0.0.0:55681"
+  insecure: true
+  sampler: "1.0"
+  env: "dev"
+registry:
+  type: "etcd"
+  etcd:
+    endpoints:
+      - 0.0.0.0:2379
+  nacos:
+    address: 0.0.0.0
+    port: 8848
+    namespaceId: "public"
+    logLevel: "info"
+    cacheDir: ./
+    logDir: ./
+    updateThreadNum: 1
+    timeout: 3s
+    beatInterval: 1s
+    notLoadCacheAtStart: true
+    updateCacheWhenEmpty: true
+business:
+  jwt:
+    accessSecret: "SGO3lP58kDrKnq4tC0cyeVBEmQs02jIWHb2Aih97oZTfM6zgxLwRdJYXuF1apd"
+    refreshAfter: 86400
+    accessExpire: 604800
+    issuer: "user"
