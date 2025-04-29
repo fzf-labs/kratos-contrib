@@ -3,7 +3,6 @@ package bootstrap
 import (
 	"flag"
 
-	conf "github.com/fzf-labs/kratos-contrib/api/conf/v1"
 	v1 "github.com/fzf-labs/kratos-contrib/api/conf/v1"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
@@ -31,7 +30,7 @@ func LoadConfig(flagconf string) *v1.Bootstrap {
 	if err := c.Load(); err != nil {
 		panic(err)
 	}
-	var bc conf.Bootstrap
+	var bc v1.Bootstrap
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
