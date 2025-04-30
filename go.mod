@@ -1,15 +1,15 @@
 module github.com/fzf-labs/kratos-contrib
 
-go 1.22.0
+go 1.23.0
+
+toolchain go1.24.2
 
 require (
 	github.com/bytedance/sonic v1.12.3
 	github.com/go-kratos/aegis v0.2.0
-	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20250307161706-982270e9576b
-	github.com/go-kratos/kratos/contrib/config/etcd/v2 v2.0.0-20250307161706-982270e9576b
-	github.com/go-kratos/kratos/contrib/config/nacos/v2 v2.0.0-20250307161706-982270e9576b
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20250307161706-982270e9576b
 	github.com/go-kratos/kratos/contrib/log/zerolog/v2 v2.0.0-20250307161706-982270e9576b
+	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20250429074618-c82f7957223f
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20250307161706-982270e9576b
 	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20250307161706-982270e9576b
 	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20250307161706-982270e9576b
@@ -30,16 +30,20 @@ require (
 	go.opentelemetry.io/otel/sdk v1.31.0
 	go.opentelemetry.io/otel/sdk/metric v1.31.0
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.61.1
-	google.golang.org/protobuf v1.35.1
+	google.golang.org/grpc v1.67.1
+	google.golang.org/protobuf v1.36.5
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.5-20250307204501-0409229c3780.1 // indirect
+	cel.dev/expr v0.22.0 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/aliyun/alibaba-cloud-sdk-go v1.62.510 // indirect
+	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/bufbuild/protovalidate-go v0.9.2 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/bytedance/sonic/loader v0.2.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -59,6 +63,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/google/cel-go v0.24.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1 // indirect
@@ -90,6 +95,7 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/shirou/gopsutil/v3 v3.23.7 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
+	github.com/stoewer/go-strcase v1.3.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
@@ -101,14 +107,13 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.9.0 // indirect
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
-	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
-	google.golang.org/genproto v0.0.0-20240116215550-a9fa1716bcac // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20240125205218-1f4bbc51befe // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240125205218-1f4bbc51befe // indirect
+	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
+	golang.org/x/net v0.37.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20250313205543-e70fdf4c4cb4 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250313205543-e70fdf4c4cb4 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

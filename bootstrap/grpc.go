@@ -8,13 +8,13 @@ import (
 	"github.com/fzf-labs/kratos-contrib/middleware/limiter"
 	"github.com/fzf-labs/kratos-contrib/middleware/logging"
 	"github.com/fzf-labs/kratos-contrib/middleware/metrics"
+	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/circuitbreaker"
 	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/registry"
 	kGrpc "github.com/go-kratos/kratos/v2/transport/grpc"
 	"google.golang.org/grpc"
@@ -55,7 +55,7 @@ func NewGrpcClient(
 				ms = append(ms, metadata.Client())
 			}
 			if cfg.Client.Grpc.Middleware.GetEnableValidate() {
-				ms = append(ms, validate.Validator())
+				ms = append(ms, validate.ProtoValidate())
 			}
 		}
 	}
@@ -101,7 +101,7 @@ func NewGrpcServer(
 			ms = append(ms, metadata.Client())
 		}
 		if cfg.Server.Grpc.Middleware.GetEnableValidate() {
-			ms = append(ms, validate.Validator())
+			ms = append(ms, validate.ProtoValidate())
 		}
 	}
 	ms = append(ms, m...)
