@@ -24,10 +24,8 @@ const (
 // 日志
 type Logger struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Type          string                 `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`       // 类型
-	Zap           *Logger_Zap            `protobuf:"bytes,2,opt,name=zap,proto3" json:"zap,omitempty"`         // Zap
-	Aliyun        *Logger_Aliyun         `protobuf:"bytes,3,opt,name=aliyun,proto3" json:"aliyun,omitempty"`   // 阿里云
-	Tencent       *Logger_Tencent        `protobuf:"bytes,4,opt,name=tencent,proto3" json:"tencent,omitempty"` // 腾讯
+	Type          string                 `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"` // 类型 std zap zerolog
+	Zap           *Logger_Zap            `protobuf:"bytes,2,opt,name=zap,proto3" json:"zap,omitempty"`   // Zap
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -72,20 +70,6 @@ func (x *Logger) GetType() string {
 func (x *Logger) GetZap() *Logger_Zap {
 	if x != nil {
 		return x.Zap
-	}
-	return nil
-}
-
-func (x *Logger) GetAliyun() *Logger_Aliyun {
-	if x != nil {
-		return x.Aliyun
-	}
-	return nil
-}
-
-func (x *Logger) GetTencent() *Logger_Tencent {
-	if x != nil {
-		return x.Tencent
 	}
 	return nil
 }
@@ -167,154 +151,14 @@ func (x *Logger_Zap) GetMaxBackups() int32 {
 	return 0
 }
 
-// 阿里云
-type Logger_Aliyun struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Endpoint      string                 `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`         // 公网接入地址
-	Project       string                 `protobuf:"bytes,2,opt,name=project,proto3" json:"project,omitempty"`           //
-	AccessKey     string                 `protobuf:"bytes,3,opt,name=accessKey,proto3" json:"accessKey,omitempty"`       // 访问密钥ID
-	AccessSecret  string                 `protobuf:"bytes,4,opt,name=accessSecret,proto3" json:"accessSecret,omitempty"` // 访问密钥
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Logger_Aliyun) Reset() {
-	*x = Logger_Aliyun{}
-	mi := &file_api_conf_v1_logger_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Logger_Aliyun) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Logger_Aliyun) ProtoMessage() {}
-
-func (x *Logger_Aliyun) ProtoReflect() protoreflect.Message {
-	mi := &file_api_conf_v1_logger_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Logger_Aliyun.ProtoReflect.Descriptor instead.
-func (*Logger_Aliyun) Descriptor() ([]byte, []int) {
-	return file_api_conf_v1_logger_proto_rawDescGZIP(), []int{0, 1}
-}
-
-func (x *Logger_Aliyun) GetEndpoint() string {
-	if x != nil {
-		return x.Endpoint
-	}
-	return ""
-}
-
-func (x *Logger_Aliyun) GetProject() string {
-	if x != nil {
-		return x.Project
-	}
-	return ""
-}
-
-func (x *Logger_Aliyun) GetAccessKey() string {
-	if x != nil {
-		return x.AccessKey
-	}
-	return ""
-}
-
-func (x *Logger_Aliyun) GetAccessSecret() string {
-	if x != nil {
-		return x.AccessSecret
-	}
-	return ""
-}
-
-// 腾讯
-type Logger_Tencent struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Endpoint      string                 `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`         // 公网接入地址
-	TopicId       string                 `protobuf:"bytes,2,opt,name=topicId,proto3" json:"topicId,omitempty"`           //
-	AccessKey     string                 `protobuf:"bytes,3,opt,name=accessKey,proto3" json:"accessKey,omitempty"`       // 访问密钥ID
-	AccessSecret  string                 `protobuf:"bytes,4,opt,name=accessSecret,proto3" json:"accessSecret,omitempty"` // 访问密钥
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Logger_Tencent) Reset() {
-	*x = Logger_Tencent{}
-	mi := &file_api_conf_v1_logger_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Logger_Tencent) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Logger_Tencent) ProtoMessage() {}
-
-func (x *Logger_Tencent) ProtoReflect() protoreflect.Message {
-	mi := &file_api_conf_v1_logger_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Logger_Tencent.ProtoReflect.Descriptor instead.
-func (*Logger_Tencent) Descriptor() ([]byte, []int) {
-	return file_api_conf_v1_logger_proto_rawDescGZIP(), []int{0, 2}
-}
-
-func (x *Logger_Tencent) GetEndpoint() string {
-	if x != nil {
-		return x.Endpoint
-	}
-	return ""
-}
-
-func (x *Logger_Tencent) GetTopicId() string {
-	if x != nil {
-		return x.TopicId
-	}
-	return ""
-}
-
-func (x *Logger_Tencent) GetAccessKey() string {
-	if x != nil {
-		return x.AccessKey
-	}
-	return ""
-}
-
-func (x *Logger_Tencent) GetAccessSecret() string {
-	if x != nil {
-		return x.AccessSecret
-	}
-	return ""
-}
-
 var File_api_conf_v1_logger_proto protoreflect.FileDescriptor
 
 const file_api_conf_v1_logger_proto_rawDesc = "" +
 	"\n" +
-	"\x18api/conf/v1/logger.proto\x12\x04conf\"\xb0\x04\n" +
+	"\x18api/conf/v1/logger.proto\x12\x04conf\"\xcc\x01\n" +
 	"\x06Logger\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\"\n" +
-	"\x03zap\x18\x02 \x01(\v2\x10.conf.Logger.ZapR\x03zap\x12+\n" +
-	"\x06aliyun\x18\x03 \x01(\v2\x13.conf.Logger.AliyunR\x06aliyun\x12.\n" +
-	"\atencent\x18\x04 \x01(\v2\x14.conf.Logger.TencentR\atencent\x1a\x89\x01\n" +
+	"\x03zap\x18\x02 \x01(\v2\x10.conf.Logger.ZapR\x03zap\x1a\x89\x01\n" +
 	"\x03Zap\x12\x1a\n" +
 	"\bfilename\x18\x01 \x01(\tR\bfilename\x12\x14\n" +
 	"\x05level\x18\x02 \x01(\tR\x05level\x12\x18\n" +
@@ -322,17 +166,7 @@ const file_api_conf_v1_logger_proto_rawDesc = "" +
 	"\x06maxAge\x18\x04 \x01(\x05R\x06maxAge\x12\x1e\n" +
 	"\n" +
 	"maxBackups\x18\x05 \x01(\x05R\n" +
-	"maxBackups\x1a\x80\x01\n" +
-	"\x06Aliyun\x12\x1a\n" +
-	"\bendpoint\x18\x01 \x01(\tR\bendpoint\x12\x18\n" +
-	"\aproject\x18\x02 \x01(\tR\aproject\x12\x1c\n" +
-	"\taccessKey\x18\x03 \x01(\tR\taccessKey\x12\"\n" +
-	"\faccessSecret\x18\x04 \x01(\tR\faccessSecret\x1a\x81\x01\n" +
-	"\aTencent\x12\x1a\n" +
-	"\bendpoint\x18\x01 \x01(\tR\bendpoint\x12\x18\n" +
-	"\atopicId\x18\x02 \x01(\tR\atopicId\x12\x1c\n" +
-	"\taccessKey\x18\x03 \x01(\tR\taccessKey\x12\"\n" +
-	"\faccessSecret\x18\x04 \x01(\tR\faccessSecretB\x83\x01\n" +
+	"maxBackupsB\x83\x01\n" +
 	"\bcom.confB\vLoggerProtoP\x01Z:github.com/fzf-labs/kratos-contrib/api/conf/v1/api/conf/v1\xa2\x02\x03CXX\xaa\x02\x04Conf\xca\x02\x04Conf\xe2\x02\x10Conf\\GPBMetadata\xea\x02\x04Confb\x06proto3"
 
 var (
@@ -347,22 +181,18 @@ func file_api_conf_v1_logger_proto_rawDescGZIP() []byte {
 	return file_api_conf_v1_logger_proto_rawDescData
 }
 
-var file_api_conf_v1_logger_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_conf_v1_logger_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_api_conf_v1_logger_proto_goTypes = []any{
-	(*Logger)(nil),         // 0: conf.Logger
-	(*Logger_Zap)(nil),     // 1: conf.Logger.Zap
-	(*Logger_Aliyun)(nil),  // 2: conf.Logger.Aliyun
-	(*Logger_Tencent)(nil), // 3: conf.Logger.Tencent
+	(*Logger)(nil),     // 0: conf.Logger
+	(*Logger_Zap)(nil), // 1: conf.Logger.Zap
 }
 var file_api_conf_v1_logger_proto_depIdxs = []int32{
 	1, // 0: conf.Logger.zap:type_name -> conf.Logger.Zap
-	2, // 1: conf.Logger.aliyun:type_name -> conf.Logger.Aliyun
-	3, // 2: conf.Logger.tencent:type_name -> conf.Logger.Tencent
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_api_conf_v1_logger_proto_init() }
@@ -376,7 +206,7 @@ func file_api_conf_v1_logger_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_conf_v1_logger_proto_rawDesc), len(file_api_conf_v1_logger_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -22,52 +22,52 @@ import (
 func NewHTTPServer(cfg *conf.Bootstrap, logger log.Logger, m ...middleware.Middleware) *http.Server {
 	var opts []http.ServerOption
 	var ms []middleware.Middleware
-	if cfg.Server != nil && cfg.Server.Http != nil && cfg.Server.Http.Middleware != nil {
-		if cfg.Server.Grpc.Middleware.GetEnableTracing() {
+	if cfg.GetServer() != nil && cfg.GetServer().GetHttp() != nil && cfg.GetServer().GetHttp().GetMiddleware() != nil {
+		if cfg.GetServer().GetHttp().GetMiddleware().GetEnableTracing() {
 			ms = append(ms, tracing.Server())
 		}
-		if cfg.Server.Grpc.Middleware.GetEnableLogging() {
+		if cfg.GetServer().GetHttp().GetMiddleware().GetEnableLogging() {
 			ms = append(ms, logging.Server(logger))
 		}
-		if cfg.Server.Grpc.Middleware.GetEnableRecovery() {
+		if cfg.GetServer().GetHttp().GetMiddleware().GetEnableRecovery() {
 			ms = append(ms, recovery.Recovery())
 		}
-		if cfg.Server.Grpc.Middleware.GetEnableMetrics() {
+		if cfg.GetServer().GetHttp().GetMiddleware().GetEnableMetrics() {
 			ms = append(ms, metrics.Server())
 		}
-		if cfg.Server.Grpc.Middleware.GetEnableRateLimiter() {
-			ms = append(ms, limiter.Limit(cfg.Server.Grpc.Middleware.Limiter))
+		if cfg.GetServer().GetHttp().GetMiddleware().GetEnableRateLimiter() {
+			ms = append(ms, limiter.Limit(cfg.GetServer().GetHttp().GetMiddleware().GetLimiter()))
 		}
-		if cfg.Server.Grpc.Middleware.GetEnableMetadata() {
+		if cfg.GetServer().GetHttp().GetMiddleware().GetEnableMetadata() {
 			ms = append(ms, metadata.Server())
 		}
-		if cfg.Server.Grpc.Middleware.GetEnableValidate() {
+		if cfg.GetServer().GetHttp().GetMiddleware().GetEnableValidate() {
 			ms = append(ms, validate.ProtoValidate())
 		}
 	}
 	ms = append(ms, m...)
 	opts = append(opts, http.Middleware(ms...))
-	if cfg.Server.Http.GetEnableCors() {
+	if cfg.GetServer().GetHttp().GetEnableCors() {
 		opts = append(opts, http.Filter(handlers.CORS(
-			handlers.AllowedHeaders(cfg.Server.Http.Cors.Headers),
-			handlers.AllowedMethods(cfg.Server.Http.Cors.Methods),
-			handlers.AllowedOrigins(cfg.Server.Http.Cors.Origins),
+			handlers.AllowedHeaders(cfg.GetServer().GetHttp().GetCors().GetHeaders()),
+			handlers.AllowedMethods(cfg.GetServer().GetHttp().GetCors().GetMethods()),
+			handlers.AllowedOrigins(cfg.GetServer().GetHttp().GetCors().GetOrigins()),
 		)))
 	}
-	if cfg.Server.Http.Network != "" {
-		opts = append(opts, http.Network(cfg.Server.Http.Network))
+	if cfg.GetServer().GetHttp().GetNetwork() != "" {
+		opts = append(opts, http.Network(cfg.GetServer().GetHttp().GetNetwork()))
 	}
-	if cfg.Server.Http.Addr != "" {
-		opts = append(opts, http.Address(cfg.Server.Http.Addr))
+	if cfg.GetServer().GetHttp().GetAddr() != "" {
+		opts = append(opts, http.Address(cfg.GetServer().GetHttp().GetAddr()))
 	}
-	if cfg.Server.Http.Timeout != nil {
-		opts = append(opts, http.Timeout(cfg.Server.Http.Timeout.AsDuration()))
+	if cfg.GetServer().GetHttp().GetTimeout() != nil {
+		opts = append(opts, http.Timeout(cfg.GetServer().GetHttp().GetTimeout().AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	if cfg.Server.Http.Middleware.GetEnableMetrics() {
+	if cfg.GetServer().GetHttp().GetMiddleware().GetEnableMetrics() {
 		registerHttpMetrics(srv)
 	}
-	if cfg.Server.Http.GetEnablePprof() {
+	if cfg.GetServer().GetHttp().GetEnablePprof() {
 		registerHttpPprof(srv)
 	}
 	return srv

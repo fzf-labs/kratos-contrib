@@ -50,6 +50,14 @@ data:
     dialTimeout: 1s
     readTimeout: 0.4s
     writeTimeout: 0.6s
+logger:
+  type: "std"
+  zap:
+    filename: "logs/kratos.log"
+    level: "debug"
+    maxSize: 100
+    maxAge: 10
+    maxBackups: 10
 trace:
   batcher: "otlphttp"
   endpoint: "0.0.0.0:55681"
