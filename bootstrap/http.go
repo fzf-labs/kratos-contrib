@@ -38,8 +38,8 @@ func NewHTTPServer(cfg *conf.Bootstrap, logger log.Logger, m ...middleware.Middl
 		if cfg.Server.Grpc.Middleware.GetEnableRateLimiter() {
 			ms = append(ms, limiter.Limit(cfg.Server.Grpc.Middleware.Limiter))
 		}
-		if cfg.Client.Grpc.Middleware.GetEnableMetadata() {
-			ms = append(ms, metadata.Client())
+		if cfg.Server.Grpc.Middleware.GetEnableMetadata() {
+			ms = append(ms, metadata.Server())
 		}
 		if cfg.Server.Grpc.Middleware.GetEnableValidate() {
 			ms = append(ms, validate.ProtoValidate())

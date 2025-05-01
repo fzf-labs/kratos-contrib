@@ -1,7 +1,37 @@
 server:
   http:
+    network: "tcp"
     addr: 0.0.0.0:8000
     timeout: 6s
+    middleware:
+      enableLogging: true
+      enableRecovery: true
+      enableTracing: true
+      enableMetadata: true
+      enableValidate: true
+      enableCircuitBreaker: true
+      enableRateLimiter: true
+      enableMetrics: true
+      limiter:
+        window: 1s
+        bucket: 100
+        cpuThreshold: 80
+      metrics:
+        histogram: true
+        counter: true
+        gauge: true
+        summary: true
+    cors:
+      headers:
+        - "Content-Type"
+        - "Authorization"
+      methods:
+        - "GET"
+        - "POST"
+      origins:
+        - "*"
+      enableCors: true
+      enablePprof: true
   grpc:
     addr: 0.0.0.0:9000
     timeout: 6s
