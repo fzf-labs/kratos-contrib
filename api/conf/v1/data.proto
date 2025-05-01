@@ -10,12 +10,14 @@ option go_package = "github.com/fzf-labs/kratos-contrib/api/conf/v1;v1";
 message Data {
   // 数据库 gorm
   message Gorm {
-    string dataSourceName = 1; // DSN
-    int32 maxIdleConn = 2; // 闲置连接数
-    int32 maxOpenConn = 3; // 最大打开的连接数
-    google.protobuf.Duration connMaxLifeTime = 4; // 连接可以重复使用的最长时间
-    bool showLog = 5; // 慢日志开关
-    bool tracing = 6; // 链路追踪开关
+    string driver = 1; // 驱动 mysql, postgres
+    string dataSourceName = 2; // DSN
+    int32 maxIdleConn = 3; // 闲置连接数
+    int32 maxOpenConn = 4; // 最大打开的连接数
+    google.protobuf.Duration connMaxIdleTime = 5; // 连接可以重复使用的最长时间
+    google.protobuf.Duration connMaxLifeTime = 6; // 连接可以重复使用的最长时间
+    bool showLog = 7; // 慢日志开关
+    bool tracing = 8; // 链路追踪开关
   }
   // redis
   message Redis {

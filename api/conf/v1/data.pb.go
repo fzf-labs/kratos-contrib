@@ -78,12 +78,14 @@ func (x *Data) GetRedis() *Data_Redis {
 // 数据库 gorm
 type Data_Gorm struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	DataSourceName  string                 `protobuf:"bytes,1,opt,name=dataSourceName,proto3" json:"dataSourceName,omitempty"`   // DSN
-	MaxIdleConn     int32                  `protobuf:"varint,2,opt,name=maxIdleConn,proto3" json:"maxIdleConn,omitempty"`        // 闲置连接数
-	MaxOpenConn     int32                  `protobuf:"varint,3,opt,name=maxOpenConn,proto3" json:"maxOpenConn,omitempty"`        // 最大打开的连接数
-	ConnMaxLifeTime *durationpb.Duration   `protobuf:"bytes,4,opt,name=connMaxLifeTime,proto3" json:"connMaxLifeTime,omitempty"` // 连接可以重复使用的最长时间
-	ShowLog         bool                   `protobuf:"varint,5,opt,name=showLog,proto3" json:"showLog,omitempty"`                // 慢日志开关
-	Tracing         bool                   `protobuf:"varint,6,opt,name=tracing,proto3" json:"tracing,omitempty"`                // 链路追踪开关
+	Driver          string                 `protobuf:"bytes,1,opt,name=driver,proto3" json:"driver,omitempty"`                   // 驱动 mysql, postgres
+	DataSourceName  string                 `protobuf:"bytes,2,opt,name=dataSourceName,proto3" json:"dataSourceName,omitempty"`   // DSN
+	MaxIdleConn     int32                  `protobuf:"varint,3,opt,name=maxIdleConn,proto3" json:"maxIdleConn,omitempty"`        // 闲置连接数
+	MaxOpenConn     int32                  `protobuf:"varint,4,opt,name=maxOpenConn,proto3" json:"maxOpenConn,omitempty"`        // 最大打开的连接数
+	ConnMaxIdleTime *durationpb.Duration   `protobuf:"bytes,5,opt,name=connMaxIdleTime,proto3" json:"connMaxIdleTime,omitempty"` // 连接可以重复使用的最长时间
+	ConnMaxLifeTime *durationpb.Duration   `protobuf:"bytes,6,opt,name=connMaxLifeTime,proto3" json:"connMaxLifeTime,omitempty"` // 连接可以重复使用的最长时间
+	ShowLog         bool                   `protobuf:"varint,7,opt,name=showLog,proto3" json:"showLog,omitempty"`                // 慢日志开关
+	Tracing         bool                   `protobuf:"varint,8,opt,name=tracing,proto3" json:"tracing,omitempty"`                // 链路追踪开关
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -118,6 +120,13 @@ func (*Data_Gorm) Descriptor() ([]byte, []int) {
 	return file_api_conf_v1_data_proto_rawDescGZIP(), []int{0, 0}
 }
 
+func (x *Data_Gorm) GetDriver() string {
+	if x != nil {
+		return x.Driver
+	}
+	return ""
+}
+
 func (x *Data_Gorm) GetDataSourceName() string {
 	if x != nil {
 		return x.DataSourceName
@@ -137,6 +146,13 @@ func (x *Data_Gorm) GetMaxOpenConn() int32 {
 		return x.MaxOpenConn
 	}
 	return 0
+}
+
+func (x *Data_Gorm) GetConnMaxIdleTime() *durationpb.Duration {
+	if x != nil {
+		return x.ConnMaxIdleTime
+	}
+	return nil
 }
 
 func (x *Data_Gorm) GetConnMaxLifeTime() *durationpb.Duration {
@@ -281,17 +297,19 @@ var File_api_conf_v1_data_proto protoreflect.FileDescriptor
 
 const file_api_conf_v1_data_proto_rawDesc = "" +
 	"\n" +
-	"\x16api/conf/v1/data.proto\x12\x04conf\x1a\x1egoogle/protobuf/duration.proto\"\xae\x05\n" +
+	"\x16api/conf/v1/data.proto\x12\x04conf\x1a\x1egoogle/protobuf/duration.proto\"\x8b\x06\n" +
 	"\x04Data\x12#\n" +
 	"\x04gorm\x18\x01 \x01(\v2\x0f.conf.Data.GormR\x04gorm\x12&\n" +
-	"\x05redis\x18\x02 \x01(\v2\x10.conf.Data.RedisR\x05redis\x1a\xeb\x01\n" +
-	"\x04Gorm\x12&\n" +
-	"\x0edataSourceName\x18\x01 \x01(\tR\x0edataSourceName\x12 \n" +
-	"\vmaxIdleConn\x18\x02 \x01(\x05R\vmaxIdleConn\x12 \n" +
-	"\vmaxOpenConn\x18\x03 \x01(\x05R\vmaxOpenConn\x12C\n" +
-	"\x0fconnMaxLifeTime\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxLifeTime\x12\x18\n" +
-	"\ashowLog\x18\x05 \x01(\bR\ashowLog\x12\x18\n" +
-	"\atracing\x18\x06 \x01(\bR\atracing\x1a\xea\x02\n" +
+	"\x05redis\x18\x02 \x01(\v2\x10.conf.Data.RedisR\x05redis\x1a\xc8\x02\n" +
+	"\x04Gorm\x12\x16\n" +
+	"\x06driver\x18\x01 \x01(\tR\x06driver\x12&\n" +
+	"\x0edataSourceName\x18\x02 \x01(\tR\x0edataSourceName\x12 \n" +
+	"\vmaxIdleConn\x18\x03 \x01(\x05R\vmaxIdleConn\x12 \n" +
+	"\vmaxOpenConn\x18\x04 \x01(\x05R\vmaxOpenConn\x12C\n" +
+	"\x0fconnMaxIdleTime\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxIdleTime\x12C\n" +
+	"\x0fconnMaxLifeTime\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxLifeTime\x12\x18\n" +
+	"\ashowLog\x18\a \x01(\bR\ashowLog\x12\x18\n" +
+	"\atracing\x18\b \x01(\bR\atracing\x1a\xea\x02\n" +
 	"\x05Redis\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x12\x1a\n" +
@@ -328,15 +346,16 @@ var file_api_conf_v1_data_proto_goTypes = []any{
 var file_api_conf_v1_data_proto_depIdxs = []int32{
 	1, // 0: conf.Data.gorm:type_name -> conf.Data.Gorm
 	2, // 1: conf.Data.redis:type_name -> conf.Data.Redis
-	3, // 2: conf.Data.Gorm.connMaxLifeTime:type_name -> google.protobuf.Duration
-	3, // 3: conf.Data.Redis.dialTimeout:type_name -> google.protobuf.Duration
-	3, // 4: conf.Data.Redis.readTimeout:type_name -> google.protobuf.Duration
-	3, // 5: conf.Data.Redis.writeTimeout:type_name -> google.protobuf.Duration
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	3, // 2: conf.Data.Gorm.connMaxIdleTime:type_name -> google.protobuf.Duration
+	3, // 3: conf.Data.Gorm.connMaxLifeTime:type_name -> google.protobuf.Duration
+	3, // 4: conf.Data.Redis.dialTimeout:type_name -> google.protobuf.Duration
+	3, // 5: conf.Data.Redis.readTimeout:type_name -> google.protobuf.Duration
+	3, // 6: conf.Data.Redis.writeTimeout:type_name -> google.protobuf.Duration
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_api_conf_v1_data_proto_init() }
