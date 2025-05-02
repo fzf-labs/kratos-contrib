@@ -1,3 +1,4 @@
+name: "kratos"
 server:
   http:
     network: "tcp"
@@ -33,10 +34,31 @@ server:
       enableCors: true
       enablePprof: true
   grpc:
+    network: "tcp"
     addr: 0.0.0.0:9000
     timeout: 6s
+    middleware:
+      enableLogging: true
+      enableRecovery: true
+      enableTracing: true
+      enableMetadata: true
+      enableValidate: true
+client:
+  http:
+    timeout: 5s
+    middleware:
+      enableLogging: true
+      enableRecovery: true
+      enableTracing: true
+  grpc:
+    timeout: 5s
+    middleware:
+      enableLogging: true
+      enableRecovery: true
+      enableTracing: true
 data:
   gorm:
+    driver: "postgres"
     dataSourceName: host=0.0.0.0 port=5432 user=postgres password=123456 dbname=kratos sslmode=disable TimeZone=Asia/Shanghai
     maxIdleConn: 10
     maxOpenConn: 60
@@ -44,12 +66,16 @@ data:
     showLog: true
     tracing: true
   redis:
+    network: "tcp"
     addr: 0.0.0.0:6379
+    username: ""
     password: "123456"
     db: 0
     dialTimeout: 1s
     readTimeout: 0.4s
     writeTimeout: 0.6s
+    tracing: true
+    metrics: true
 logger:
   type: "std"
   zap:
@@ -66,6 +92,10 @@ trace:
   env: "dev"
 registry:
   type: "etcd"
+  consul:
+    scheme: "http"
+    address: "0.0.0.0:8500"
+    healthCheck: true
   etcd:
     endpoints:
       - 0.0.0.0:2379

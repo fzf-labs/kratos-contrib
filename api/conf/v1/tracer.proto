@@ -2,13 +2,12 @@ syntax = "proto3";
 
 package conf;
 
-option go_package = "g github.com/fzf-labs/kratos-contrib/api/conf/v1;v1";
+option go_package = "github.com/fzf-labs/kratos-contrib/api/conf/v1;v1";
 
 // 链路追踪
 message Tracer {
-  string batcher = 1; // jaeger或者zipkin
+  string batcher = 1; // stdout,otlphttp, otlpgrpc
   string endpoint = 2; // 端口
   bool insecure = 3; // 是否不安全
   double sampler = 4; // 采样率，默认：1.0
-  string env = 5; // 运行环境：dev、debug、product
 }

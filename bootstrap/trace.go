@@ -6,7 +6,6 @@ import (
 
 	conf "github.com/fzf-labs/kratos-contrib/api/conf/v1"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
@@ -24,9 +23,6 @@ func NewTracerProvider(cfg *conf.Tracer, serviceInfo *Service) error {
 	if cfg.Sampler == 0 {
 		cfg.Sampler = 1.0
 	}
-	if cfg.Env == "" {
-		cfg.Env = "dev"
-	}
 	opts := []traceSdk.TracerProviderOption{
 		// 将基于父span的采样率设置为Sampler(1.0=100%)
 		traceSdk.WithSampler(traceSdk.ParentBased(traceSdk.TraceIDRatioBased(cfg.Sampler))),
@@ -34,7 +30,6 @@ func NewTracerProvider(cfg *conf.Tracer, serviceInfo *Service) error {
 			semConv.ServiceNameKey.String(serviceInfo.Name),
 			semConv.ServiceVersionKey.String(serviceInfo.Version),
 			semConv.ServiceInstanceIDKey.String(serviceInfo.ID),
-			attribute.String("env", cfg.Env),
 		)),
 	}
 	if len(cfg.Endpoint) > 0 {

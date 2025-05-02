@@ -24,11 +24,10 @@ const (
 // 链路追踪
 type Tracer struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Batcher       string                 `protobuf:"bytes,1,opt,name=batcher,proto3" json:"batcher,omitempty"`    // jaeger或者zipkin
+	Batcher       string                 `protobuf:"bytes,1,opt,name=batcher,proto3" json:"batcher,omitempty"`    // stdout,otlphttp, otlpgrpc
 	Endpoint      string                 `protobuf:"bytes,2,opt,name=endpoint,proto3" json:"endpoint,omitempty"`  // 端口
 	Insecure      bool                   `protobuf:"varint,3,opt,name=insecure,proto3" json:"insecure,omitempty"` // 是否不安全
 	Sampler       float64                `protobuf:"fixed64,4,opt,name=sampler,proto3" json:"sampler,omitempty"`  // 采样率，默认：1.0
-	Env           string                 `protobuf:"bytes,5,opt,name=env,proto3" json:"env,omitempty"`            // 运行环境：dev、debug、product
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -91,24 +90,16 @@ func (x *Tracer) GetSampler() float64 {
 	return 0
 }
 
-func (x *Tracer) GetEnv() string {
-	if x != nil {
-		return x.Env
-	}
-	return ""
-}
-
 var File_api_conf_v1_tracer_proto protoreflect.FileDescriptor
 
 const file_api_conf_v1_tracer_proto_rawDesc = "" +
 	"\n" +
-	"\x18api/conf/v1/tracer.proto\x12\x04conf\"\x86\x01\n" +
+	"\x18api/conf/v1/tracer.proto\x12\x04conf\"t\n" +
 	"\x06Tracer\x12\x18\n" +
 	"\abatcher\x18\x01 \x01(\tR\abatcher\x12\x1a\n" +
 	"\bendpoint\x18\x02 \x01(\tR\bendpoint\x12\x1a\n" +
 	"\binsecure\x18\x03 \x01(\bR\binsecure\x12\x18\n" +
-	"\asampler\x18\x04 \x01(\x01R\asampler\x12\x10\n" +
-	"\x03env\x18\x05 \x01(\tR\x03envB\x83\x01\n" +
+	"\asampler\x18\x04 \x01(\x01R\asamplerB\x83\x01\n" +
 	"\bcom.confB\vTracerProtoP\x01Z:github.com/fzf-labs/kratos-contrib/api/conf/v1/api/conf/v1\xa2\x02\x03CXX\xaa\x02\x04Conf\xca\x02\x04Conf\xe2\x02\x10Conf\\GPBMetadata\xea\x02\x04Confb\x06proto3"
 
 var (

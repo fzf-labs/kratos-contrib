@@ -9,22 +9,38 @@ type Service struct {
 	Metadata map[string]string
 }
 
-func NewService(name, version, id string) *Service {
+func NewService(name, version, id string, metadata map[string]string) *Service {
 	if id == "" {
 		id, _ = os.Hostname()
+	}
+	if metadata == nil {
+		metadata = map[string]string{}
 	}
 	return &Service{
 		Name:     name,
 		Version:  version,
 		ID:       id,
-		Metadata: map[string]string{},
+		Metadata: metadata,
 	}
 }
 
-func (s *Service) GetInstanceID() string {
-	return s.ID + "." + s.Name
+// GetName 获取服务名
+func (s *Service) GetName() string {
+	return s.Name
 }
 
-func (s *Service) SetMataData(k, v string) {
-	s.Metadata[k] = v
+func (s *Service) GetVersion() string {
+	return s.Version
 }
+
+// GetInstanceID 获取实例ID
+func (s *Service) GetInstanceID() string {
+	return s.ID
+}
+
+// GetMetadata 获取元数据
+func (s *Service) GetMetadata() map[string]string {
+	return s.Metadata
+}
+
+
