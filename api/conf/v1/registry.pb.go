@@ -26,7 +26,7 @@ const (
 type Registry struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Kubernetes
-	Type          string           `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`     // 类型
+	Type          string           `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`     // 类型 none，consul，etcd，nacos
 	Consul        *Registry_Consul `protobuf:"bytes,2,opt,name=consul,proto3" json:"consul,omitempty"` // Consul
 	Etcd          *Registry_Etcd   `protobuf:"bytes,3,opt,name=etcd,proto3" json:"etcd,omitempty"`     // Etcd
 	Nacos         *Registry_Nacos  `protobuf:"bytes,4,opt,name=nacos,proto3" json:"nacos,omitempty"`   // Nacos

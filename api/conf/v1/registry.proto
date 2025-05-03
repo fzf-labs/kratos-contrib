@@ -35,7 +35,7 @@ message Registry {
     bool updateCacheWhenEmpty = 11; // 当服务列表为空时是否更新本地缓存，true: 更新,false: 不更新
   }
   // Kubernetes
-  string type = 1; // 类型
+  string type = 1; // 类型 none，consul，etcd，nacos
   Consul consul = 2; // Consul
   Etcd etcd = 3; // Etcd
   Nacos nacos = 4; // Nacos

@@ -1,119 +1,131 @@
-name: "kratos"
-server:
-  http:
-    network: "tcp"
-    addr: 0.0.0.0:8000
-    timeout: 6s
+name: "kratos" # 服务名称
+server: # 服务配置
+  http: # HTTP服务配置
+    network: "tcp" # 网络类型 tcp, unix
+    addr: 0.0.0.0:8000 # 服务地址
+    timeout: 6s # 超时时间
     middleware:
-      enableLogging: true
-      enableRecovery: true
-      enableTracing: true
-      enableMetadata: true
-      enableValidate: true
-      enableCircuitBreaker: true
-      enableRateLimiter: true
-      enableMetrics: true
-      limiter:
-        window: 1s
-        bucket: 100
-        cpuThreshold: 80
-      metrics:
-        histogram: true
-        counter: true
-        gauge: true
-        summary: true
-    cors:
-      headers:
-        - "Content-Type"
-        - "Authorization"
-      methods:
-        - "GET"
-        - "POST"
-      origins:
-        - "*"
-      enableCors: true
-      enablePprof: true
-  grpc:
-    network: "tcp"
-    addr: 0.0.0.0:9000
-    timeout: 6s
-    middleware:
-      enableLogging: true
-      enableRecovery: true
-      enableTracing: true
-      enableMetadata: true
-      enableValidate: true
-client:
-  http:
-    timeout: 5s
-    middleware:
-      enableLogging: true
-      enableRecovery: true
-      enableTracing: true
-  grpc:
-    timeout: 5s
-    middleware:
-      enableLogging: true
-      enableRecovery: true
-      enableTracing: true
-data:
-  gorm:
-    driver: "postgres"
-    dataSourceName: host=0.0.0.0 port=5432 user=postgres password=123456 dbname=kratos sslmode=disable TimeZone=Asia/Shanghai
-    maxIdleConn: 10
-    maxOpenConn: 60
-    connMaxLifeTime: 60s
-    showLog: true
-    tracing: true
-  redis:
-    network: "tcp"
-    addr: 0.0.0.0:6379
-    username: ""
-    password: "123456"
-    db: 0
-    dialTimeout: 1s
-    readTimeout: 0.4s
-    writeTimeout: 0.6s
-    tracing: true
-    metrics: true
-logger:
-  type: "std"
-  zap:
-    filename: "logs/kratos.log"
-    level: "debug"
-    maxSize: 100
-    maxAge: 10
-    maxBackups: 10
-trace:
-  batcher: "otlphttp"
-  endpoint: "0.0.0.0:55681"
-  insecure: true
-  sampler: "1.0"
-  env: "dev"
-registry:
-  type: "etcd"
-  consul:
-    scheme: "http"
-    address: "0.0.0.0:8500"
-    healthCheck: true
-  etcd:
-    endpoints:
-      - 0.0.0.0:2379
-  nacos:
-    address: 0.0.0.0
-    port: 8848
-    namespaceId: "public"
-    logLevel: "info"
-    cacheDir: ./
-    logDir: ./
-    updateThreadNum: 1
-    timeout: 3s
-    beatInterval: 1s
-    notLoadCacheAtStart: true
-    updateCacheWhenEmpty: true
-business:
-  jwt:
-    accessSecret: "SGO3lP58kDrKnq4tC0cyeVBEmQs02jIWHb2Aih97oZTfM6zgxLwRdJYXuF1apd"
-    refreshAfter: 86400
-    accessExpire: 604800
-    issuer: "user"
+      enableLogging: true # 日志开关
+      enableRecovery: true # 异常恢复
+      enableTracing: true # 链路追踪开关
+      enableMetadata: true # 链路追踪开关
+      enableValidate: true # 参数校验开关
+      enableCircuitBreaker: true # 熔断器
+      enableRateLimiter: true # 限流器
+      enableMetrics: true # 性能指标
+      limiter: # 限流器配置
+        window: 1s # 窗口时间
+        bucket: 100 # 桶大小
+        cpuThreshold: 80 # CPU阈值
+      metrics: # 性能指标配置
+        histogram: true # 直方图
+        counter: true # 计数器
+        gauge: true # 指标
+        summary: true # 摘要
+    cors: # 跨域配置
+      headers: # 请求头
+        - "Content-Type" # 内容类型
+        - "Authorization" # 授权
+      methods: # 请求方法
+        - "GET" # GET请求
+        - "POST" # POST请求
+      origins: # 请求源
+        - "*" # 所有源
+      enableCors: true # 启用跨域
+      enablePprof: true # 启用pprof
+  grpc: # gRPC服务配置
+    network: "tcp" # 网络类型 tcp, unix
+    addr: 0.0.0.0:9000 # 服务地址
+    timeout: 6s # 超时时间
+    middleware: # 中间件配置
+      enableLogging: true # 日志开关
+      enableRecovery: true # 异常恢复
+      enableTracing: true # 链路追踪开关
+      enableMetadata: true # 链路追踪开关
+      enableValidate: true # 参数校验开关
+      enableCircuitBreaker: true # 熔断器
+      enableRateLimiter: true # 限流器
+      enableMetrics: true # 性能指标
+      limiter: # 限流器配置
+        window: 1s # 窗口时间
+        bucket: 100 # 桶大小
+        cpuThreshold: 80 # CPU阈值
+      metrics: # 性能指标配置
+        histogram: true # 直方图
+        counter: true # 计数器
+        gauge: true # 指标
+        summary: true # 摘要
+client: # 客户端配置
+  http: # HTTP客户端配置
+    timeout: 5s # 超时时间
+    middleware: # 中间件配置
+      enableLogging: true # 日志开关
+      enableRecovery: true # 异常恢复
+      enableTracing: true # 链路追踪开关
+  grpc: # gRPC客户端配置
+    timeout: 5s # 超时时间
+    middleware: # 中间件配置
+      enableLogging: true # 日志开关
+      enableRecovery: true # 异常恢复
+      enableTracing: true # 链路追踪开关
+data: # 数据库配置
+  gorm: # GORM配置
+    driver: "postgres" # 数据库驱动
+    dataSourceName: host=0.0.0.0 port=5432 user=postgres password=123456 dbname=kratos sslmode=disable TimeZone=Asia/Shanghai # 数据源名称
+    maxIdleConn: 10 # 最大空闲连接
+    maxOpenConn: 60 # 最大打开连接
+    connMaxLifeTime: 60s # 连接最大生命周期
+    showLog: true # 显示日志
+    tracing: true # 链路追踪
+  redis: # Redis配置
+    network: "tcp" # 网络类型 tcp, unix
+    addr: 0.0.0.0:6379 # 服务地址
+    username: "" # 用户名
+    password: "123456" # 密码
+    db: 0 # 数据库
+    dialTimeout: 1s # 连接超时时间
+    readTimeout: 0.4s # 读取超时时间
+    writeTimeout: 0.6s # 写入超时时间
+    tracing: true # 链路追踪
+    metrics: true # 性能指标
+logger: # 日志配置
+  type: "std" # 日志类型 std, zap, zerolog
+  zap: # Zap配置
+    filename: "logs/kratos.log" # 日志文件名
+    level: "debug" # 日志级别
+    maxSize: 100 # 最大大小
+    maxAge: 10 # 最大年龄
+    maxBackups: 10 # 最大备份
+trace: # 链路追踪配置
+  batcher: "otlphttp" # 批量器 otlphttp, otlpgrpc std
+  endpoint: "0.0.0.0:55681" # 端点
+  insecure: true # 不安全
+  sampler: "1.0" # 采样器
+  env: "dev" # 环境
+registry: # 注册中心配置
+  type: "etcd" # 类型
+  consul: # Consul配置
+    scheme: "http" # 网络样式
+    address: "0.0.0.0:8500" # 服务地址
+    healthCheck: true # 健康检查
+  etcd: # Etcd配置
+    endpoints: # 端点
+      - "0.0.0.0:2379" # 端点
+  nacos: # Nacos配置
+    address: "0.0.0.0" # 服务地址
+    port: 8848 # 服务端口
+    namespaceId: "public" # 命名空间ID
+    logLevel: "info" # 日志级别
+    cacheDir: "./" # 缓存目录
+    logDir: "./" # 日志目录
+    updateThreadNum: 1 # 更新服务的线程数
+    timeout: 3s # http请求超时时间
+    beatInterval: 1s # 心跳间隔时间
+    notLoadCacheAtStart: true # 在启动时不读取本地缓存数据
+    updateCacheWhenEmpty: true # 当服务列表为空时是否更新本地缓存
+business: # 业务配置
+  jwt: # JWT配置
+    accessSecret: "SGO3lP58kDrKnq4tC0cyeVBEmQs02jIWHb2Aih97oZTfM6zgxLwRdJYXuF1apd" # 访问密钥
+    refreshAfter: 86400 # 刷新时间
+    accessExpire: 604800 # 访问过期时间
+    issuer: "user" # 发行人

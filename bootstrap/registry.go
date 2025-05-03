@@ -37,8 +37,9 @@ func NewRegistryAndDiscovery(cfg *conf.Registry) (registry.Registrar, registry.D
 	case Nacos:
 		res := NewNacosRegistry(cfg)
 		return res, res
+	default:
+		return nil, nil
 	}
-	return nil, nil
 }
 
 func NewRegistry(cfg *conf.Registry) registry.Registrar {
