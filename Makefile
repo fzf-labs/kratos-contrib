@@ -32,6 +32,17 @@ git-clean:
 	@git push -f origin ${gitBranch}
 	#清除结束
 
+# 创建新的 tag
+git-new-tag:
+	# 获取当前最新的 tag
+	@echo "当前最新的 tag: $$(git tag -l | sort -V | tail -n 1)"
+	# 生成新的版本号
+	$(eval NEW_VERSION := $(shell git tag -l | sort -V | tail -n 1 | awk -F. '{$$NF=$$NF+1; print $$1"."$$2"."$$NF}'))
+	@echo "新的版本号: ${NEW_VERSION}"
+	# 创建新的 tag
+	@git tag -a ${NEW_VERSION} -m "release ${NEW_VERSION}"
+	# 推送新的 tag
+	@git push origin ${NEW_VERSION}
 
 # show help
 help:
