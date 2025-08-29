@@ -1,6 +1,7 @@
 package mq
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -50,23 +51,12 @@ func NewMessageConfigManager(mqType MQType) *MessageConfigManager {
 }
 
 // Register 注册配置
-func (c *MessageConfigManager) Register(config *MessageConfig) (*MessageConfig, error) {
+func (c *MessageConfigManager) Register(config *MessageConfig) *MessageConfig {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if _, exists := c.Configs[config.Key]; exists {
-		return nil, KeyAlreadyExists
+		panic(fmt.Sprintf("key %s is exsit, please change one", config.Key))
 	}
 	c.Configs[config.Key] = config
-	return config, nil
-}
-
-// GetMessageConfig 获取消息配置
-func (c *MessageConfigManager) GetMessageConfig(key string) (*MessageConfig, error) {
-	c.mu.RLock()
-	defer c.mu.RUnlock()
-	config, exists := c.Configs[key]
-	if !exists {
-		return nil, KeyNotFound
-	}
-	return config, nil
+	return config
 }
