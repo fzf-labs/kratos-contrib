@@ -4,12 +4,6 @@ package conf;
 
 option go_package = "github.com/fzf-labs/kratos-contrib/api/conf/v1;v1";
 
-// 业务
-message Business {
-  // JWT校验
-  Jwt jwt = 1; // JWT 配置
-}
-
 message Jwt {
   string accessSecret = 1; // JWT 秘钥
   int32 refreshAfter = 2; // 刷新时间

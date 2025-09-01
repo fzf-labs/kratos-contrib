@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package conf;
 
-import "api/conf/v1/business.proto";
+import "google/protobuf/any.proto";
+import "api/conf/v1/jwt.proto";
 import "api/conf/v1/client.proto";
 import "api/conf/v1/data.proto";
 import "api/conf/v1/logger.proto";
@@ -21,5 +22,6 @@ message Bootstrap {
   Tracer trace = 5; // 链路追踪配置
   Logger logger = 6; // 日志配置
   Registry registry = 7; // 注册中心配置
-  Business business = 8; // 业务配置
+  map<string, Jwt> jwt = 8; // JWT 配置
+  map<string, google.protobuf.Any> business = 9; // 自定义业务配置
 }
