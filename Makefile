@@ -35,9 +35,16 @@ git-clean:
 # 创建新的 tag
 git-new-tag:
 	# 获取当前最新的 tag
-	@echo "当前最新的 tag: $$(git tag -l | sort -V | tail -n 1)"
+	$(eval LATEST_TAG := $(shell git tag -l | sort -V | tail -n 1))
+	@echo "当前最新的 tag: ${LATEST_TAG}"
+	# 检查当前代码是否比最新 tag 更新
+	@if [ "$$(git rev-list ${LATEST_TAG}..HEAD --count)" -eq "0" ]; then \
+		echo "❌ 当前代码与最新 tag ${LATEST_TAG} 相同，无需创建新版本"; \
+		exit 1; \
+	fi
+	@echo "✅ 检测到 $$(git rev-list ${LATEST_TAG}..HEAD --count) 个新提交，可以创建新版本"
 	# 生成新的版本号
-	$(eval NEW_VERSION := $(shell git tag -l | sort -V | tail -n 1 | awk -F. '{$$NF=$$NF+1; print $$1"."$$2"."$$NF}'))
+	$(eval NEW_VERSION := $(shell echo ${LATEST_TAG} | awk -F. '{$$NF=$$NF+1; print $$1"."$$2"."$$NF}'))
 	@echo "新的版本号: ${NEW_VERSION}"
 	# 创建新的 tag
 	@git tag -a ${NEW_VERSION} -m "release ${NEW_VERSION}"
