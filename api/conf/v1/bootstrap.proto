@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package conf;
 
-import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
 import "api/conf/v1/client.proto";
 import "api/conf/v1/data.proto";
 import "api/conf/v1/logger.proto";
@@ -21,5 +21,5 @@ message Bootstrap {
   Tracer trace = 5; // 链路追踪配置
   Logger logger = 6; // 日志配置
   Registry registry = 7; // 注册中心配置
-  map<string, google.protobuf.Any> business = 8; // 自定义业务配置
+  map<string, google.protobuf.Struct> business = 8; // 自定义业务配置
 }
