@@ -123,16 +123,16 @@ registry: # 注册中心配置
     beatInterval: 1s # 心跳间隔时间
     notLoadCacheAtStart: true # 在启动时不读取本地缓存数据
     updateCacheWhenEmpty: true # 当服务列表为空时是否更新本地缓存
-jwt: # JWT配置
-  user: # 用户
-    accessSecret: "SGO3lP58kDrKnq4tC0cyeVBEmQs02jIWHb2Aih97oZTfM6zgxLwRdJYXuF1apd" # 访问密钥
-    refreshAfter: 86400 # 刷新时间
-    accessExpire: 604800 # 访问过期时间
-    issuer: "user" # 发行人
-  admin: # 管理员
-    accessSecret: "SGO3lP58kDrKnq4tC0cyeVBEmQs02jIWHb2Aih97oZTfM6zgxLwRdJYXuF1apq" # 访问密钥
-    refreshAfter: 86400 # 刷新时间
-    accessExpire: 604800 # 访问过期时间
-    issuer: "admin" # 发行人
 business: # 业务配置
-
+  jwt: # JWT配置
+    user: # 用户
+      accessSecret: "SGO3lP58kDrKnq4tC0cyeVBEmQs02jIWHb2Aih97oZTfM6zgxLwRdJYXuF1apd" # 访问密钥
+      refreshAfter: 86400 # 刷新时间
+      accessExpire: 604800 # 访问过期时间
+      issuer: "user" # 发行人
+    admin: # 管理员
+      accessSecret: "SGO3lP58kDrKnq4tC0cyeVBEmQs02jIWHb2Aih97oZTfM6zgxLwRdJYXuF1apq" # 访问密钥
+      refreshAfter: 86400 # 刷新时间
+      accessExpire: 604800 # 访问过期时间
+      issuer: "admin" # 发行人
+  
