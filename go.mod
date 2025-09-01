@@ -3,7 +3,7 @@ module github.com/fzf-labs/kratos-contrib
 go 1.23.0
 
 require (
-	github.com/bytedance/sonic v1.12.3
+	github.com/bytedance/sonic v1.14.0
 	github.com/go-kratos/aegis v0.2.0
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20250307161706-982270e9576b
 	github.com/go-kratos/kratos/contrib/log/zerolog/v2 v2.0.0-20250307161706-982270e9576b
@@ -45,11 +45,10 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bufbuild/protovalidate-go v0.9.2 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
-	github.com/bytedance/sonic/loader v0.2.0 // indirect
+	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/cloudwego/base64x v0.1.4 // indirect
-	github.com/cloudwego/iasm v0.2.0 // indirect
+	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
