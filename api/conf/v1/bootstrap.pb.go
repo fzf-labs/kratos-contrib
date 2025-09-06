@@ -27,13 +27,14 @@ const (
 type Bootstrap struct {
 	state         protoimpl.MessageState      `protogen:"open.v1"`
 	Name          string                      `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`                                                                                   // 服务名
-	Server        *Server                     `protobuf:"bytes,2,opt,name=server,proto3" json:"server,omitempty"`                                                                               // 服务配置
-	Client        *Client                     `protobuf:"bytes,3,opt,name=client,proto3" json:"client,omitempty"`                                                                               // 客户端配置
-	Data          *Data                       `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`                                                                                   // 数据配置
-	Trace         *Tracer                     `protobuf:"bytes,5,opt,name=trace,proto3" json:"trace,omitempty"`                                                                                 // 链路追踪配置
-	Logger        *Logger                     `protobuf:"bytes,6,opt,name=logger,proto3" json:"logger,omitempty"`                                                                               // 日志配置
-	Registry      *Registry                   `protobuf:"bytes,7,opt,name=registry,proto3" json:"registry,omitempty"`                                                                           // 注册中心配置
-	Business      map[string]*structpb.Struct `protobuf:"bytes,8,rep,name=business,proto3" json:"business,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // 自定义业务配置
+	Env           string                      `protobuf:"bytes,2,opt,name=env,proto3" json:"env,omitempty"`                                                                                     // 环境
+	Server        *Server                     `protobuf:"bytes,3,opt,name=server,proto3" json:"server,omitempty"`                                                                               // 服务配置
+	Client        *Client                     `protobuf:"bytes,4,opt,name=client,proto3" json:"client,omitempty"`                                                                               // 客户端配置
+	Data          *Data                       `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`                                                                                   // 数据配置
+	Trace         *Tracer                     `protobuf:"bytes,6,opt,name=trace,proto3" json:"trace,omitempty"`                                                                                 // 链路追踪配置
+	Logger        *Logger                     `protobuf:"bytes,7,opt,name=logger,proto3" json:"logger,omitempty"`                                                                               // 日志配置
+	Registry      *Registry                   `protobuf:"bytes,8,opt,name=registry,proto3" json:"registry,omitempty"`                                                                           // 注册中心配置
+	Business      map[string]*structpb.Struct `protobuf:"bytes,9,rep,name=business,proto3" json:"business,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // 自定义业务配置
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -71,6 +72,13 @@ func (*Bootstrap) Descriptor() ([]byte, []int) {
 func (x *Bootstrap) GetName() string {
 	if x != nil {
 		return x.Name
+	}
+	return ""
+}
+
+func (x *Bootstrap) GetEnv() string {
+	if x != nil {
+		return x.Env
 	}
 	return ""
 }
@@ -128,17 +136,18 @@ var File_api_conf_v1_bootstrap_proto protoreflect.FileDescriptor
 
 const file_api_conf_v1_bootstrap_proto_rawDesc = "" +
 	"\n" +
-	"\x1bapi/conf/v1/bootstrap.proto\x12\x04conf\x1a\x1cgoogle/protobuf/struct.proto\x1a\x18api/conf/v1/client.proto\x1a\x16api/conf/v1/data.proto\x1a\x18api/conf/v1/logger.proto\x1a\x1aapi/conf/v1/registry.proto\x1a\x18api/conf/v1/server.proto\x1a\x18api/conf/v1/tracer.proto\"\x92\x03\n" +
+	"\x1bapi/conf/v1/bootstrap.proto\x12\x04conf\x1a\x1cgoogle/protobuf/struct.proto\x1a\x18api/conf/v1/client.proto\x1a\x16api/conf/v1/data.proto\x1a\x18api/conf/v1/logger.proto\x1a\x1aapi/conf/v1/registry.proto\x1a\x18api/conf/v1/server.proto\x1a\x18api/conf/v1/tracer.proto\"\xa4\x03\n" +
 	"\tBootstrap\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12$\n" +
-	"\x06server\x18\x02 \x01(\v2\f.conf.ServerR\x06server\x12$\n" +
-	"\x06client\x18\x03 \x01(\v2\f.conf.ClientR\x06client\x12\x1e\n" +
-	"\x04data\x18\x04 \x01(\v2\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x10\n" +
+	"\x03env\x18\x02 \x01(\tR\x03env\x12$\n" +
+	"\x06server\x18\x03 \x01(\v2\f.conf.ServerR\x06server\x12$\n" +
+	"\x06client\x18\x04 \x01(\v2\f.conf.ClientR\x06client\x12\x1e\n" +
+	"\x04data\x18\x05 \x01(\v2\n" +
 	".conf.DataR\x04data\x12\"\n" +
-	"\x05trace\x18\x05 \x01(\v2\f.conf.TracerR\x05trace\x12$\n" +
-	"\x06logger\x18\x06 \x01(\v2\f.conf.LoggerR\x06logger\x12*\n" +
-	"\bregistry\x18\a \x01(\v2\x0e.conf.RegistryR\bregistry\x129\n" +
-	"\bbusiness\x18\b \x03(\v2\x1d.conf.Bootstrap.BusinessEntryR\bbusiness\x1aT\n" +
+	"\x05trace\x18\x06 \x01(\v2\f.conf.TracerR\x05trace\x12$\n" +
+	"\x06logger\x18\a \x01(\v2\f.conf.LoggerR\x06logger\x12*\n" +
+	"\bregistry\x18\b \x01(\v2\x0e.conf.RegistryR\bregistry\x129\n" +
+	"\bbusiness\x18\t \x03(\v2\x1d.conf.Bootstrap.BusinessEntryR\bbusiness\x1aT\n" +
 	"\rBusinessEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12-\n" +
 	"\x05value\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x05value:\x028\x01B\x86\x01\n" +
