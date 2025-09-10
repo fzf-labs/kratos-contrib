@@ -26,7 +26,7 @@ func NewFlags() *Flags {
 func LoadConfig(flagconf string) *v1.Bootstrap {
 	c := config.New(
 		config.WithSource(
-			file.NewSource(fmt.Sprintf("%s/config.%s.yaml", flagconf, os.Getenv("GO_ENV"))),
+			file.NewSource(fmt.Sprintf("%s/config.%s.yaml", flagconf, os.Getenv("APP_ENV"))),
 		),
 	)
 	if err := c.Load(); err != nil {

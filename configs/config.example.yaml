@@ -1,5 +1,5 @@
 name: "kratos" # 服务名称
-env: ${GO_ENV} # 环境
+env: ${APP_ENV} # 环境
 server: # 服务配置
   http: # HTTP服务配置
     network: "tcp" # 网络类型 tcp, unix
