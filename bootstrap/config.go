@@ -2,6 +2,8 @@ package bootstrap
 
 import (
 	"flag"
+	"fmt"
+	"os"
 
 	v1 "github.com/fzf-labs/kratos-contrib/api/conf/v1"
 	"github.com/go-kratos/kratos/v2/config"
@@ -24,7 +26,7 @@ func NewFlags() *Flags {
 func LoadConfig(flagconf string) *v1.Bootstrap {
 	c := config.New(
 		config.WithSource(
-			file.NewSource(flagconf),
+			file.NewSource(fmt.Sprintf("%s/config.%s.yaml", flagconf, os.Getenv("GO_ENV"))),
 		),
 	)
 	if err := c.Load(); err != nil {
