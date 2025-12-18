@@ -5,13 +5,13 @@ go 1.23.0
 require (
 	github.com/bytedance/sonic v1.14.0
 	github.com/go-kratos/aegis v0.2.0
-	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20250307161706-982270e9576b
-	github.com/go-kratos/kratos/contrib/log/zerolog/v2 v2.0.0-20250307161706-982270e9576b
-	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20250429074618-c82f7957223f
-	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20250307161706-982270e9576b
-	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20250307161706-982270e9576b
-	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20250307161706-982270e9576b
-	github.com/go-kratos/kratos/v2 v2.8.4
+	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20251205160234-b9fab9a5a5ab
+	github.com/go-kratos/kratos/contrib/log/zerolog/v2 v2.0.0-20251205160234-b9fab9a5a5ab
+	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20251205160234-b9fab9a5a5ab
+	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20251205160234-b9fab9a5a5ab
+	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20251205160234-b9fab9a5a5ab
+	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20251205160234-b9fab9a5a5ab
+	github.com/go-kratos/kratos/v2 v2.9.2
 	github.com/gorilla/handlers v1.5.2
 	github.com/hashicorp/consul/api v1.28.2
 	github.com/hibiken/asynq v0.25.1
@@ -31,19 +31,19 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.31.0
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.67.1
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/protobuf v1.36.6
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.5-20250307204501-0409229c3780.1 // indirect
-	cel.dev/expr v0.22.0 // indirect
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250717165733-d22d418d82d8.1 // indirect
+	buf.build/go/protovalidate v0.14.0 // indirect
+	cel.dev/expr v0.23.1 // indirect
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/aliyun/alibaba-cloud-sdk-go v1.62.510 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/bufbuild/protovalidate-go v0.9.2 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -63,7 +63,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/cel-go v0.24.1 // indirect
+	github.com/google/cel-go v0.25.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1 // indirect
