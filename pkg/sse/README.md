@@ -5,11 +5,13 @@
 ## 特性
 
 - 专为 Kratos 框架设计，自动处理 Transport Context
-- 支持 JSON 自动序列化
-- 处理多行数据，确保 SSE 协议规范
+- 支持 JSON 自动序列化（包括 `json.RawMessage` 直接透传）
+- 处理多行数据（`\n`、`\r`、`\r\n`），确保 SSE 协议规范
 - 内置 Buffer Pool，减少内存分配
 - 支持心跳保活机制
 - 自动屏蔽 Kratos 全局超时，保持长连接
+- 并发安全，支持多 goroutine 同时写入
+- 实现 `io.Writer` 接口，可直接用于流式写入
 
 ## 安装
 
@@ -125,6 +127,11 @@ writer.WriteEvent(map[string]int{"count": 42})
 // 发送字符串（会带引号）
 writer.WriteEvent("hello")
 // 输出: data: "hello"\n\n
+
+// 发送 json.RawMessage（直接透传，不重复编码）
+raw := json.RawMessage(`{"already":"json"}`)
+writer.WriteEvent(raw)
+// 输出: data: {"already":"json"}\n\n
 ```
 
 ---
@@ -224,7 +231,7 @@ writer.WriteDone()
 func (s *Writer) WriteError(err error) error
 ```
 
-发送错误事件。
+发送错误事件。如果传入 `nil`，不会发送任何内容。
 
 ```go
 writer.WriteError(errors.New("something went wrong"))
@@ -232,6 +239,9 @@ writer.WriteError(errors.New("something went wrong"))
 // event: error
 // data: {"error":"something went wrong"}
 //
+
+// 传入 nil 不发送任何内容
+writer.WriteError(nil) // 无输出
 ```
 
 ---
@@ -242,11 +252,18 @@ writer.WriteError(errors.New("something went wrong"))
 func (s *Writer) WriteComment(comment string) error
 ```
 
-发送 SSE 注释（可用作心跳）。
+发送 SSE 注释（可用作心跳）。支持多行注释。
 
 ```go
 writer.WriteComment("heartbeat")
 // 输出: : heartbeat\n\n
+
+// 多行注释
+writer.WriteComment("line1\nline2")
+// 输出:
+// : line1
+// : line2
+//
 ```
 
 ---
@@ -274,9 +291,43 @@ func (s *Writer) StartHeartbeat(interval time.Duration) func()
 
 启动定时心跳，返回停止函数。
 
+**注意**：如果 `interval <= 0`，会返回一个空操作的停止函数，不会启动心跳。
+
 ```go
 stop := writer.StartHeartbeat(30 * time.Second)
 defer stop()
+
+// 如果连接断开或 context 取消，心跳会自动停止
+```
+
+---
+
+### Write
+
+```go
+func (s *Writer) Write(data []byte) (int, error)
+```
+
+实现 `io.Writer` 接口，直接写入原始字节数据并立即刷新。
+
+```go
+n, err := writer.Write([]byte("raw bytes"))
+// 直接写入底层 ResponseWriter，不添加 SSE 格式
+```
+
+---
+
+### Context
+
+```go
+func (s *Writer) Context() context.Context
+```
+
+返回无超时限制的流式 context，用于长连接操作。
+
+```go
+ctx := writer.Context()
+// 使用此 context 进行后续操作，不受 Kratos 全局超时影响
 ```
 
 ---
@@ -431,7 +482,13 @@ eventSource.onerror = (event) => {
 
 4. **错误处理**：所有写入方法返回的错误通常表示客户端已断开连接，可以安全地结束处理。
 
-5. **JSON 编码**：`WriteEvent` 会对所有数据进行 JSON 编码（包括字符串），确保前端可以统一使用 `JSON.parse()` 解析。如需发送原始字符串，请使用 `WriteRawEvent`。
+5. **JSON 编码**：`WriteEvent` 会对所有数据进行 JSON 编码（包括字符串），确保前端可以统一使用 `JSON.parse()` 解析。如需发送原始字符串，请使用 `WriteRawEvent`。对于已经是 JSON 的 `json.RawMessage`，会直接透传不重复编码。
+
+6. **并发安全**：所有写入方法都是并发安全的，可以在多个 goroutine 中同时调用。内部使用 `sync.Mutex` 保证线程安全。
+
+7. **多行数据**：库自动处理 `\n`、`\r`、`\r\n` 换行符，确保多行数据符合 SSE 协议规范（每行都带有 `data:` 前缀）。
+
+8. **Buffer Pool**：内置 buffer 池用于减少内存分配，超过 4KB 的大 buffer 不会放回池中，由 GC 自动回收。
 
 ## License
 

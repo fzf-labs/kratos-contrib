@@ -74,13 +74,43 @@ type Writer struct {
 	ctx     context.Context
 }
 
-// noDeadlineContext 屏蔽 Deadline 但保留 Cancel
-type noDeadlineContext struct {
-	context.Context
+// streamContext 创建一个完全独立的 context，不受 Kratos 超时中间件影响
+// 不嵌入原始 context，避免 SDK 检测到超时
+// 通过监听底层连接（CloseNotifier）检测客户端断开
+type streamContext struct {
+	values    context.Context // 仅用于传递 Value，不作为父 context
+	done      chan struct{}   // 客户端断开信号
+	closeOnce sync.Once       // 确保只关闭一次
+	errMu     sync.RWMutex    // 保护 err 字段
+	err       error           // 存储错误
 }
 
-func (c *noDeadlineContext) Deadline() (time.Time, bool) {
-	return time.Time{}, false
+func (c *streamContext) Deadline() (time.Time, bool) {
+	return time.Time{}, false // 永不超时
+}
+
+func (c *streamContext) Done() <-chan struct{} {
+	return c.done
+}
+
+func (c *streamContext) Err() error {
+	c.errMu.RLock()
+	defer c.errMu.RUnlock()
+	return c.err
+}
+
+func (c *streamContext) Value(key any) any {
+	return c.values.Value(key)
+}
+
+// cancel 取消 context
+func (c *streamContext) cancel(err error) {
+	c.closeOnce.Do(func() {
+		c.errMu.Lock()
+		c.err = err
+		c.errMu.Unlock()
+		close(c.done)
+	})
 }
 
 // NewWriter 从 Kratos context 中创建 SSE Writer
@@ -122,9 +152,25 @@ func NewWriter(ctx context.Context) (*Writer, context.Context, error) {
 	// 写入 200 状态码（在确认支持流式后再写）
 	w.WriteHeader(stdhttp.StatusOK)
 
-	// 关键：保留取消信号，但移除超时限制
-	// 这样当客户端关闭连接时，ctx.Done() 依然能触发，但不会被 Kratos 的全局 Timeout 中断
-	streamCtx := &noDeadlineContext{Context: ctx}
+	// 关键：创建完全独立的 context，脱离 Kratos 超时中间件控制
+	// 不嵌入原始 context（避免 SDK 内部检测到超时），仅保留 Value 传递能力
+	// 通过 http.CloseNotifier（已废弃但仍可用）或写入失败来检测客户端断开
+	streamCtx := &streamContext{
+		values: ctx, // 仅用于 Value() 方法传递（如 transport 信息）
+		done:   make(chan struct{}),
+	}
+
+	// 尝试使用 CloseNotifier 检测客户端断开（Go 1.11+ http.Server 仍支持）
+	if cn, ok := w.(stdhttp.CloseNotifier); ok {
+		go func() {
+			select {
+			case <-cn.CloseNotify():
+				streamCtx.cancel(context.Canceled)
+			case <-streamCtx.done:
+				// 已经被其他方式关闭
+			}
+		}()
+	}
 
 	return &Writer{
 		w:       w,

@@ -515,28 +515,77 @@ func TestBufferPool(t *testing.T) {
 }
 
 // =============================================================================
-// 测试 noDeadlineContext
+// 测试 streamContext
 // =============================================================================
 
-func TestNoDeadlineContext(t *testing.T) {
-	parent, cancel := context.WithTimeout(context.Background(), time.Hour)
-	defer cancel()
+func TestStreamContext(t *testing.T) {
+	t.Run("no_deadline", func(t *testing.T) {
+		// 即使 parent 有超时，streamContext 也不应该有 deadline
+		parent, cancel := context.WithTimeout(context.Background(), time.Hour)
+		defer cancel()
 
-	ctx := &noDeadlineContext{Context: parent}
+		ctx := &streamContext{
+			values: parent,
+			done:   make(chan struct{}),
+		}
 
-	deadline, ok := ctx.Deadline()
-	if ok {
-		t.Errorf("noDeadlineContext should return ok=false, got deadline=%v", deadline)
-	}
+		deadline, ok := ctx.Deadline()
+		if ok {
+			t.Errorf("streamContext should return ok=false, got deadline=%v", deadline)
+		}
+	})
 
-	// 验证 cancel 仍然可以传播
-	cancel()
-	select {
-	case <-ctx.Done():
-		// 期望的行为
-	case <-time.After(time.Second):
-		t.Error("cancel should propagate through noDeadlineContext")
-	}
+	t.Run("cancel", func(t *testing.T) {
+		ctx := &streamContext{
+			values: context.Background(),
+			done:   make(chan struct{}),
+		}
+
+		// 取消 context
+		ctx.cancel(context.Canceled)
+
+		select {
+		case <-ctx.Done():
+			// 期望的行为
+		case <-time.After(time.Second):
+			t.Error("cancel should close done channel")
+		}
+
+		// 验证错误
+		if ctx.Err() != context.Canceled {
+			t.Errorf("Err() = %v, want %v", ctx.Err(), context.Canceled)
+		}
+	})
+
+	t.Run("cancel_only_once", func(t *testing.T) {
+		ctx := &streamContext{
+			values: context.Background(),
+			done:   make(chan struct{}),
+		}
+
+		// 多次取消不应该 panic
+		ctx.cancel(context.Canceled)
+		ctx.cancel(context.DeadlineExceeded) // 第二次取消应该被忽略
+
+		// 错误应该是第一次设置的
+		if ctx.Err() != context.Canceled {
+			t.Errorf("Err() = %v, want %v", ctx.Err(), context.Canceled)
+		}
+	})
+
+	t.Run("value_propagation", func(t *testing.T) {
+		type key string
+		parent := context.WithValue(context.Background(), key("test"), "value")
+
+		ctx := &streamContext{
+			values: parent,
+			done:   make(chan struct{}),
+		}
+
+		if ctx.Value(key("test")) != "value" {
+			t.Errorf("Value() should propagate from parent context")
+		}
+	})
 }
 
 // =============================================================================
